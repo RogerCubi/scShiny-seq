@@ -11,10 +11,10 @@ tabItem(tabName = "qcFilterTab",
                         ),
                         column(6,
                                actionButton("submit_data","validate selection", style = "width: 100%"))
-                        )
-
                  )
-          ),
+                 
+          )
+        ),
         fluidRow(
           hr(),
           column(12,
@@ -31,11 +31,5 @@ tabItem(tabName = "qcFilterTab",
                  numericInput("maxMito",
                               label="Maximal mitocondrial genes per cell selection",min=0,max=Inf,value=5),
                  actionButton("submit_threshold","Submit Threshold", style = "width: 100%"))
-          )
         )
-          
-        
-
-
-
-
+)
