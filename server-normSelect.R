@@ -24,7 +24,14 @@ normalizeReactive <-
                     # all.genes <- rownames(pbmc)
                     # pbmc <- ScaleData(pbmc, features = all.genes)
                     print("Job done")
+                    
+                    # Identify the x most highly variable genes
+                    topX <- head(VariableFeatures(ngsData), input$points)
+                    plot1 <- VariableFeaturePlot(ngsData)
+                    plot2 <- LabelPoints(plot = plot1, points = topX, repel = TRUE)
+                    output$feature_scatter <- renderPlot(plot1 + plot2)
                     return(list('pbmc'=ngsData))                      
                   })})
+
 
 
