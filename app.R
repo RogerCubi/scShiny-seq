@@ -22,14 +22,16 @@ ui <- tagList(
             id = "tabs",
             menuItem(text = "Input Data", tabName = "datainput", icon = icon("upload")),
             menuItem(text = "QC & Filter", tabName = "qcFilterTab", icon = icon("th")),
-            menuItem(text = "Normalization", tabName = "filterNormSelectTab", icon = icon("th"))
+            menuItem(text = "Normalization", tabName = "filterNormSelectTab", icon = icon("th")),
+            menuItem(text = "Linear Dimensional Reduction", tabName = "pcaTab", icon = icon("th"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
         tabItems(
             source("ui-tab-inputdata.R", local = TRUE)$value,
             source("ui-tab-qcfilter.R", local = TRUE)$value,
-            source("ui-tab-filterNormSelect.R", local = TRUE)$value
+            source("ui-tab-filterNormSelect.R", local = TRUE)$value,
+            source("ui-tab-dimensionalReduction.R", local = TRUE)$value
         )
     ),
 )#dashboardPage
@@ -45,6 +47,8 @@ server <- function(input, output) {
     source("server-qcfilter.R",local = TRUE)
     
     source("server-normSelect.R",local = TRUE)
+    
+    source("server-dimensionalReduction.R",local = TRUE)
     
 }
 
