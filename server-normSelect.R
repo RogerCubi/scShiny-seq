@@ -30,6 +30,11 @@ normalizeReactive <-
                     plot1 <- VariableFeaturePlot(ngsData)
                     plot2 <- LabelPoints(plot = plot1, points = topX, repel = TRUE)
                     output$feature_scatter <- renderPlot(plot1 + plot2)
+                    
+                    #Scaling the data
+                    shiny::setProgress(value = 0.8, detail = " Scaling data ...")
+                    all.genes <- rownames(ngsData)
+                    ngsData <- ScaleData(ngsData, features = all.genes)
                     return(list('pbmc'=ngsData))                      
                   })})
 
