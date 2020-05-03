@@ -21,7 +21,7 @@ tabItem(tabName = "pcaTab",
           sidebarLayout(
             sidebarPanel(
               selectInput(inputId = "visualizePCA", label =  "Select PCA visualization",
-                          choices = c("VizDimReduction","DimPlot","DimHeatmap")),
+                          choices = c("VizDimReduction","DimPlot","DimHeatmap"),selected = "VizDimReduction"),
               conditionalPanel(condition = "input.visualizePCA == 'VizDimReduction'",
                                numericInput(inputId = "vizdims", label =  "Number of Dimensions to show", value = 2, min = 1, max = Inf, step = 1)
                                ),
@@ -33,7 +33,7 @@ tabItem(tabName = "pcaTab",
               actionButton(inputId = "pcaGraphImput", label = "Validate Selection")
             ), # sidebarPanel
             mainPanel(
-              
+              plotOutput("dimRedPlot")
             )# mainPanel
           )
         ))

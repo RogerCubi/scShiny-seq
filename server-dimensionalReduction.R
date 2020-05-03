@@ -39,14 +39,19 @@ pcaPlotReactive <-
                   withProgress(message = "Generating the plot, please wait",{
                     print("pcaPlotReactive")
                     
-                    ngsData <- normalizeReactive()$ngsData
+                    ngsData <- pcaReactive()$ngsData
                     
-                    ngsData <- RunPCA(ngsData, features = VariableFeatures(object = ngsData))
-                    
-                    # Examine and visualize PCA results a few different ways
-                    output$renderprint <- renderPrint({print(ngsData[["pca"]], dims = 1:input$PCs_to_Show, nfeatures = input$genes_to_Show)})
+                    if (input$visualizePCA == "VizDimReduction"){
+                      output$dimRedPlot <- renderPlot(VizDimLoadings(ngsData, dims = 1:input$vizdims, reduction = "pca"))
+                    }
+                    else if (input$visualizePCA == "DimPlot"){
+                      output$dimRedPlot <- renderPlot(DimPlot(ngsData, reduction = "pca"))
+                    }
+                    else if (input$visualizePCA == "DimHeatmap"){
+                      output$dimRedPlot <- renderPlot(DimHeatmap(ngsData, dims = 1:input$heatdims, cells = input$cellNumber, balanced = TRUE))
+                    }
                   })
                   
-                  return(list("ngsData"=ngsData))  
+                  #return(list("ngsData"=ngsData))  
                 }
   )
