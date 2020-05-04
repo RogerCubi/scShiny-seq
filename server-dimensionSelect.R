@@ -22,10 +22,3 @@ dimensionalityReactive <-
                 }
   )
 
-
-# output$dimReactive <- reactive({
-#   
-#   return(!is.null(dimensionalityReactive()))
-#   
-# })
-# outputOptions(output, 'dimensionalityReactive', suspendWhenHidden=FALSE)
