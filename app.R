@@ -12,6 +12,7 @@ require(shinydashboard)
 require(Seurat)
 library(dplyr)
 library(patchwork)
+library(shinyFiles)
 
 # Define UI for application that draws a histogram
 ui <- tagList(
@@ -25,7 +26,8 @@ ui <- tagList(
             menuItem(text = "Normalization", tabName = "filterNormSelectTab", icon = icon("th")),
             menuItem(text = "Linear Dimensional Reduction", tabName = "pcaTab", icon = icon("th")),
             menuItem(text = "Determine the Dimensionality", tabName = "dimTab", icon = icon("chalkboard-teacher")),
-            menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group"))
+            menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group")),
+            menuItem(text = "Save the Seurat Object", tabName = "saveSeuratTab", icon = icon("save"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
@@ -35,7 +37,8 @@ ui <- tagList(
             source("ui-tab-filterNormSelect.R", local = TRUE)$value,
             source("ui-tab-dimensionalReduction.R", local = TRUE)$value,
             source("ui-tab-dimensionSelect.R", local = TRUE)$value,
-            source("ui-tab-clustering.R", local = TRUE)$value
+            source("ui-tab-clustering.R", local = TRUE)$value,
+            source("ui-tab-saveObject.R", local = TRUE)$value
         )
     ),
 )#dashboardPage
@@ -57,6 +60,8 @@ server <- function(input, output) {
     source("server-dimensionSelect.R",local = TRUE)
     
     source("server-clustering.R",local = TRUE)
+    
+    source("server-saveObject.R",local = TRUE)
     
 }
 
