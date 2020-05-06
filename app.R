@@ -13,6 +13,10 @@ require(Seurat)
 library(dplyr)
 library(patchwork)
 library(shinyFiles)
+# if (!requireNamespace("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+# 
+# BiocManager::install("DESeq2")
 
 # Define UI for application that draws a histogram
 ui <- tagList(
@@ -27,7 +31,8 @@ ui <- tagList(
             menuItem(text = "Linear Dimensional Reduction", tabName = "pcaTab", icon = icon("th")),
             menuItem(text = "Determine the Dimensionality", tabName = "dimTab", icon = icon("chalkboard-teacher")),
             menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group")),
-            menuItem(text = "Save the Seurat Object", tabName = "saveSeuratTab", icon = icon("save"))
+            menuItem(text = "Save the Seurat Object", tabName = "saveSeuratTab", icon = icon("save")),
+            menuItem(text = "Differentially expressed features", tabName = "diffExpTab", icon = icon("search"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
@@ -38,7 +43,8 @@ ui <- tagList(
             source("ui-tab-dimensionalReduction.R", local = TRUE)$value,
             source("ui-tab-dimensionSelect.R", local = TRUE)$value,
             source("ui-tab-clustering.R", local = TRUE)$value,
-            source("ui-tab-saveObject.R", local = TRUE)$value
+            source("ui-tab-saveObject.R", local = TRUE)$value,
+            source("ui-tab-diffExpress.R", local = TRUE)$value
         )
     ),
 )#dashboardPage
@@ -47,7 +53,7 @@ ui <- tagList(
 #max upload 300mb
 options(shiny.maxRequestSize = 300*1024^2)
 
-server <- function(input, output) {
+server <- function(input, output, session) {
     
     source("server-initInputData.R",local = TRUE)
     
@@ -62,6 +68,8 @@ server <- function(input, output) {
     source("server-clustering.R",local = TRUE)
     
     source("server-saveObject.R",local = TRUE)
+    
+    source("server-diffExpress.R",local = TRUE)
     
 }
 
