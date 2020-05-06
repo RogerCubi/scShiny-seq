@@ -13,6 +13,7 @@ require(Seurat)
 library(dplyr)
 library(patchwork)
 library(shinyFiles)
+library(DT)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
 # 
@@ -31,8 +32,8 @@ ui <- tagList(
             menuItem(text = "Linear Dimensional Reduction", tabName = "pcaTab", icon = icon("th")),
             menuItem(text = "Determine the Dimensionality", tabName = "dimTab", icon = icon("chalkboard-teacher")),
             menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group")),
-            menuItem(text = "Save the Seurat Object", tabName = "saveSeuratTab", icon = icon("save")),
-            menuItem(text = "Differentially expressed features", tabName = "diffExpTab", icon = icon("search"))
+            menuItem(text = "Save or load Seurat analysis", tabName = "saveSeuratTab", icon = icon("save")),
+            menuItem(text = "Differentially expressed genes", tabName = "diffExpTab", icon = icon("search"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
