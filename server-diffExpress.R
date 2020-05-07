@@ -21,8 +21,8 @@ observe({
 
 observe({
   DEclusterReactive1()
-  # DEclusterReactive3()
 })
+
 
 DEclusterReactive1 <-
   eventReactive(input$allValidate,
@@ -33,19 +33,18 @@ DEclusterReactive1 <-
                     ngsData <- clusteringReactive()$ngsData
                     
                     # find markers for every cluster compared to all remaining cells
-                    ngsData.markers <- FindAllMarkers(ngsData, only.pos = input$onlyPos, min.pct = input$min.pct, logfc.threshold = input$logfcThreshold, ,test.use = input$DEtests1) 
-                    
+                    ngsData.markers <- FindAllMarkers(ngsData, only.pos = input$onlyPos, min.pct = input$min.pct, logfc.threshold = input$logfcThreshold,test.use = input$DEtests1) 
+                    #DEanalysis$ngsData.markers <- ngsData.markers
                     print("Find markers done")
                     output$DEclusterTable <- renderTable((ngsData.markers %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC)))
 
                   
-                  #return(list("ngsData"=ngsData))  
+                  return(list("clusters"= ngsData.markers))  
                 })}
   )
 
 observe({
   DEclusterReactive2()
-  # DEclusterReactive3()
 })
 DEclusterReactive2 <-
   eventReactive(input$clusterValidate,
@@ -56,7 +55,7 @@ DEclusterReactive2 <-
                     ngsData <- clusteringReactive()$ngsData
                     
                     # find markers for every cluster compared to all remaining cells
-                    ngsData.markers1 <- FindMarkers(ngsData, ident.1 = input$clusterNum, only.pos = input$onlyPos1, min.pct = input$min.pct1, logfc.threshold = input$logfcThreshold1, ,test.use = input$DEtests1) 
+                    ngsData.markers1 <- FindMarkers(ngsData, ident.1 = input$clusterNum, only.pos = input$onlyPos1, min.pct = input$min.pct1, logfc.threshold = input$logfcThreshold1,test.use = input$DEtests1) 
                     
                     print("Find markers done")
                     #output$DEcluster1Table <- renderTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = avg_logFC)))
@@ -88,6 +87,28 @@ DEclusterReactive3 <-
                     #return(list("ngsData"=ngsData))  
                   })}
   )
+
+#heatmap
+observe({
+  DEclusterReactive4()
+})
+
+
+DEclusterReactive4 <-
+  eventReactive(input$heatmapClusterValidate,
+                ignoreNULL = TRUE, {
+                  
+                  validate(need(DEclusterReactive1()$clusters,
+                                message = "You need to find all markers for all clusters previously. this can be done in the Find all markers tab."))
+                  
+                  ngsData <- clusteringReactive()$ngsData
+                  clusters <- DEclusterReactive1()$clusters
+                  
+                  selectedGenes <- (clusters %>% group_by(cluster) %>% top_n(n = input$DEgenNumb3, wt = avg_logFC)) 
+                  
+                  output$clusterHeatmap <- renderPlot({DoHeatmap(ngsData, features = selectedGenes$gene) + NoLegend()})
+                  
+                  }) 
 
 
 
