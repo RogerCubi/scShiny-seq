@@ -33,7 +33,8 @@ ui <- tagList(
             menuItem(text = "Determine the Dimensionality", tabName = "dimTab", icon = icon("chalkboard-teacher")),
             menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group")),
             menuItem(text = "Save or load Seurat analysis", tabName = "saveSeuratTab", icon = icon("save")),
-            menuItem(text = "Differentially expressed genes", tabName = "diffExpTab", icon = icon("search"))
+            menuItem(text = "Differentially expressed genes", tabName = "diffExpTab", icon = icon("search")),
+            menuItem(text = "Visualizing marker expression", tabName = "plotMarkerTab", icon = icon("chart-bar"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
@@ -45,7 +46,8 @@ ui <- tagList(
             source("ui-tab-dimensionSelect.R", local = TRUE)$value,
             source("ui-tab-clustering.R", local = TRUE)$value,
             source("ui-tab-saveObject.R", local = TRUE)$value,
-            source("ui-tab-diffExpress.R", local = TRUE)$value
+            source("ui-tab-diffExpress.R", local = TRUE)$value,
+            source("ui-tab-visualizingExpression.R", local = TRUE)$value
         )
     ),
 )#dashboardPage
@@ -71,6 +73,8 @@ server <- function(input, output, session) {
     source("server-saveObject.R",local = TRUE)
     
     source("server-diffExpress.R",local = TRUE)
+    
+    source("server-visualizingExpression.R",local = TRUE)
     
 }
 
