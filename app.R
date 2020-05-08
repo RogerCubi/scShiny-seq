@@ -14,6 +14,7 @@ library(dplyr)
 library(patchwork)
 library(shinyFiles)
 library(DT)
+library(ggplot2)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
 # 
