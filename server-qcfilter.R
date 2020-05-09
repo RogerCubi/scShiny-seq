@@ -26,24 +26,25 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                  #ngsData <- reactiveSeuratObject()$ngsData
                                  
                                  if (!is.null(reactiveSeuratObject()$ngsData)){
+                                   print("ThresholdDataReactive")
                                    ngsData <- reactiveSeuratObject()$ngsData
                                    ngsData[["percent.mt"]] <- PercentageFeatureSet(ngsData, pattern = "^MT-")
                                    
                                    # Features
-                                   minThreshFeaturesA = round(min(pbmc[["nFeature_RNA"]][,1]),4)
-                                   maxThreshFeaturesA = round(max(pbmc[["nFeature_RNA"]][,1]),4)
+                                   minThreshFeaturesA = round(min(ngsData[["nFeature_RNA"]][,1]),4)
+                                   maxThreshFeaturesA = round(max(ngsData[["nFeature_RNA"]][,1]),4)
                                    minThreshFeatures = minThreshFeaturesA - 0.05*(maxThreshFeaturesA - minThreshFeaturesA)
                                    maxThreshFeatures = maxThreshFeaturesA + 0.05*(maxThreshFeaturesA - minThreshFeaturesA)
                                    
                                    #Counts
-                                   minThreshCountsA = round(min(pbmc[["nCount_RNA"]][,1]),4)
-                                   maxThreshCountsA = round(max(pbmc[["nCount_RNA"]][,1]),4)
+                                   minThreshCountsA = round(min(ngsData[["nCount_RNA"]][,1]),4)
+                                   maxThreshCountsA = round(max(ngsData[["nCount_RNA"]][,1]),4)
                                    minThreshCounts = minThreshCountsA - 0.05*(maxThreshCountsA - minThreshCountsA)
                                    maxThreshCounts = maxThreshCountsA + 0.05*(maxThreshCountsA - minThreshCountsA)
                                    
                                    #Mitocondrial
-                                   minThreshMtA = round(min(pbmc[["percent.mt"]][,1]),4)
-                                   maxThreshMtA = round(max(pbmc[["percent.mt"]][,1]),4)
+                                   minThreshMtA = round(min(ngsData[["percent.mt"]][,1]),4)
+                                   maxThreshMtA = round(max(ngsData[["percent.mt"]][,1]),4)
                                    minThreshMt = minThreshMtA - 0.05*(maxThreshMtA - minThreshMtA)
                                    maxThreshMt = maxThreshMtA + 0.05*(maxThreshMtA - minThreshMtA)
                                    
@@ -68,14 +69,95 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                                                      + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=2, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
                                                                      + scale_y_continuous(limits=c(minThreshMt - 0.1*(maxThreshMt - minThreshMt),maxThreshMt + 0.5*(maxThreshMt - minThreshMt)))
                                    )
-                                 }
-                                 
-  
-  
-  
-}
+                                   
+                                   # Text Output Feature
+                                   output$numberCellsFeature <- renderText({
+                                     
+                                     featureData <- FetchData(object = ngsData, vars = "nFeature_RNA")
+                                     featureSeuratThreshold = ngsData[, which(x = featureData >  input$featureThreshold[1] & featureData < input$featureThreshold[2])]
+                                     featureDataThreshold <- FetchData(object = featureSeuratThreshold, vars = "nFeature_RNA")
+                                       
+                                     paste0("Selected ",nrow(featureDataThreshold), " cells of a total of ", nrow(featureData))
+                                     })
+                                   
+                                   # Text Output Counts
+                                   output$numberCellsCounts <- renderText({
+                                     
+                                     countsData <- FetchData(object = ngsData, vars = "nCount_RNA")
+                                     countsSeuratThreshold = ngsData[, which(x = countsData >  input$countsThreshold[1] & countsData < input$countsThreshold[2])]
+                                     countsDataThreshold <- FetchData(object = countsSeuratThreshold, vars = "nCount_RNA")
+                                     
+                                     paste0("Selected ",nrow(countsDataThreshold), " cells of a total of ", nrow(countsData))
+                                     })
+                                   
+                                   # Text Output Mitocondrial
+                                   output$numberCellsMito <- renderText({
+                                     
+                                     mitoData <- FetchData(object = ngsData, vars = "percent.mt")
+                                     mitoSeuratThreshold = ngsData[, which(x =  mitoData < input$mitocondrialThreshold[1])]
+                                     mitoDataThreshold <- FetchData(object = mitoSeuratThreshold, vars = "percent.mt")
+                                     
+                                     paste0("Selected ",nrow(mitoDataThreshold), " cells of a total of ", nrow(mitoData))
+                                   })
+                                   
+                                   # Text Output all
+                                   output$numberCellsThreshold <- renderText({
+                                     
+                                     featureData <- FetchData(object = ngsData, vars = "nFeature_RNA")
+                                     countsData <- FetchData(object = ngsData, vars = "nCount_RNA")
+                                     mitoData <- FetchData(object = ngsData, vars = "percent.mt")
 
-)
+                                     allSeuratThreshold = ngsData[, which(x = featureData >  input$featureThreshold[1] & featureData < input$featureThreshold[2] &
+                                                                            countsData >  input$countsThreshold[1] & countsData < input$countsThreshold[2] & 
+                                                                            mitoData < input$mitocondrialThreshold[1])]
+                                     allDataThreshold <- FetchData(object = allSeuratThreshold, vars = "nFeature_RNA")
+                                     
+                                     paste0("Overall threshold selection returns ",nrow(allDataThreshold), " cells of a total of ", nrow(featureData))
+                                   })
+                                   return(list('ngsData'=ngsData))
+                                   # analyzeThresholdReactive <-
+                                   #   eventReactive(input$submit_threshold,
+                                   #                 ignoreNULL = TRUE, {
+                                   #                   ngsData <- subset(ngsData, subset = nFeature_RNA > input$featureThreshold[1] & nFeature_RNA < input$featureThreshold[2] &
+                                   #                                       nCount_RNA > countsThreshold[1] & nCount_RNA < countsThreshold[2] &
+                                   #                                       percent.mt < input$mitocondrialThreshold)
+                                   #                   #print("done")
+                                   #                   return(list('ngsData'=ngsData)) 
+                                   #                 }
+                                   #   )
+                                   # 
+                                   # if (!is.null(analyzeThresholdReactive()$ngsData)){
+                                   #   print("done")
+                                   #   return(list('ngsData'=ngsData))
+                                   # }
+                                 }
+                                 }
+                               ) # ThresholdDataReactive
+
+
+observe({
+  analyzeThresholdReactive()
+})
+analyzeThresholdReactive <-
+  eventReactive(input$submit_threshold,
+                ignoreNULL = TRUE, {
+                  print("analyzeThresholdReactive")
+                  if (!is.null(reactiveSeuratObject()$ngsData)){
+                  
+                    ngsData <- ThresholdDataReactive()$ngsData
+                    ngsData <- subset(ngsData, subset = nFeature_RNA > input$featureThreshold[1] & nFeature_RNA < input$featureThreshold[2] &
+                                      nCount_RNA > input$countsThreshold[1] & nCount_RNA < input$countsThreshold[2] &
+                                      percent.mt < input$mitocondrialThreshold)
+                  print("done")
+                  return(list('ngsData'=ngsData)) }
+                }
+  )
+
+
+
+
+
+
 
 
 

@@ -22,8 +22,17 @@ tabItem(tabName = "qcFilterTab",
                                              textOutput("numberCellsMito")))
                        
                        )
+                       ), # fluidRow
+        hr(),
+        br(),
+        fluidRow(column(6,
+                        verticalLayout(
+                                textOutput("numberCellsThreshold"),
+                                actionButton("submit_threshold","Submit Threshold", style = "width: 100%")
+                        )
+        ))
         )
-)
+
 #         fluidRow(
 #           
 #           column(12,
