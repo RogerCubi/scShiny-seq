@@ -20,7 +20,7 @@ tabItem(tabName = "diffExpTab",
                                actionButton(inputId = "allValidate",label = "Validate selection"),
                                hr(),
                                fluidRow(column(5,numericInput(inputId = "DEgenNumb", label = "Number of genes per cluster to show", value = 2,min = 1,max = Inf,step = 1))),
-                               tableOutput("DEclusterTable")
+                               dataTableOutput("DEclusterTable")
                                )),
             tabPanel(title = "Find markers by cluster",
                      wellPanel(h4("Select the parameters:"),
@@ -42,7 +42,7 @@ tabItem(tabName = "diffExpTab",
                                actionButton(inputId = "clusterValidate",label = "Validate selection"),
                                hr(),
                                fluidRow(column(5,numericInput(inputId = "DEgenNumb1", label = "Number of genes to show", value = 2,min = 1,max = Inf,step = 1))),
-                               tableOutput("DEcluster1Table")
+                               dataTableOutput("DEcluster1Table")
                      )),
             tabPanel(title = "Find markers by cluster vs other clusters",
                      wellPanel(h4("Select the parameters:"),
@@ -65,7 +65,7 @@ tabItem(tabName = "diffExpTab",
                                actionButton(inputId = "clusterVsClusterValidate",label = "Validate selection"),
                                hr(),
                                fluidRow(column(5,numericInput(inputId = "DEgenNumb2", label = "Number of genes  to show", value = 2,min = 1,max = Inf,step = 1))),
-                               tableOutput("DEcluster2Table")
+                               dataTableOutput("DEcluster2Table")
                      )),
             tabPanel(title = "Heatmap",
                      fluidRow(

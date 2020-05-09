@@ -33,12 +33,15 @@ DEclusterReactive1 <-
                     ngsData <- clusteringReactive()$ngsData
                     
                     # find markers for every cluster compared to all remaining cells
-                    ngsData.markers <- FindAllMarkers(ngsData, only.pos = input$onlyPos, min.pct = input$min.pct, logfc.threshold = input$logfcThreshold,test.use = input$DEtests1) 
+                    ngsData.markers <- FindAllMarkers(ngsData, only.pos = input$onlyPos, min.pct = input$min.pct, logfc.threshold = input$logfcThreshold,test.use = input$DEtests) 
                     #DEanalysis$ngsData.markers <- ngsData.markers
                     print("Find markers done")
-                    output$DEclusterTable <- renderTable((ngsData.markers %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC)))
-
-                  
+                    if (input$DEtests == "roc"){
+                      output$DEclusterTable <- DT::renderDataTable((ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = power)))
+                    }
+                    else {
+                      output$DEclusterTable <- DT::renderDataTable((ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC)))
+                    }
                   return(list("clusters"= ngsData.markers))  
                 })}
   )
@@ -58,10 +61,13 @@ DEclusterReactive2 <-
                     ngsData.markers1 <- FindMarkers(ngsData, ident.1 = input$clusterNum, only.pos = input$onlyPos1, min.pct = input$min.pct1, logfc.threshold = input$logfcThreshold1,test.use = input$DEtests1) 
                     
                     print("Find markers done")
-                    #output$DEcluster1Table <- renderTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = avg_logFC)))
-                    output$DEcluster1Table <- renderTable(head((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)),input$DEgenNumb1))
-                    
-                    #return(list("ngsData"=ngsData))  
+                    if (input$DEtests1 == "roc"){
+                      output$DEcluster1Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = power)))
+                    }
+                    else {
+                    output$DEcluster1Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = avg_logFC)))
+                    #output$DEcluster1Table <- DT::renderDataTable(head((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)),input$DEgenNumb1))
+                    }
                   })}
   )
 
@@ -80,11 +86,13 @@ DEclusterReactive3 <-
                     ngsData.markers2 <- FindMarkers(ngsData, ident.1 = input$clusterNum1, ident.2 = input$clusterNum2,only.pos = input$onlyPos2, min.pct = input$min.pct2, logfc.threshold = input$logfcThreshold2,test.use = input$DEtests2) 
                     
                     print("Find markers done")
-                    #output$DEcluster2Table <- renderTable((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = avg_logFC)))
-                    output$DEcluster2Table <- renderTable(head((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)),input$DEgenNumb2))
                     
-                    
-                    #return(list("ngsData"=ngsData))  
+                    if (input$DEtests2 == "roc"){
+                      output$DEcluster2Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = power)))
+                    }
+                    else {
+                      output$DEcluster2Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = avg_logFC)))
+                    }
                   })}
   )
 
