@@ -8,7 +8,7 @@ normalizeReactive <-
                   withProgress(message = "Normalizing and scaling data, please wait",{
                     print("normalizeReactive")
                     
-                    ngsData <- ThresholdDataReactive()$ngsData
+                    ngsData <- analyzeThresholdReactive()$ngsData
                     
                     shiny::setProgress(value = 0.3, detail = " Normalizing ...")
                     

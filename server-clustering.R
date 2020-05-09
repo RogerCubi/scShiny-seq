@@ -3,8 +3,8 @@ observe({
 })
 
 clusteringReactive <-
-  eventReactive(input$clusteringImput,
-                ignoreNULL = FALSE, {
+  eventReactive(input$clusteringSelect,
+                ignoreNULL = TRUE, {
                   withProgress(message = "Performing the dataset Clustering, please wait",{
                     print("clusteringReactive")
                     

@@ -18,6 +18,23 @@ observe({
   
 })
 
+observe({
+  
+  if(!is.null(loadClusteringReactive()))
+  {
+    ngsData = loadClusteringReactive()$ngsData
+    
+    updateSelectizeInput(session,'clusterNum',
+                         choices=levels(ngsData), selected = 0)
+    updateSelectizeInput(session,'clusterNum1',
+                         choices=levels(ngsData), selected = 0)
+    updateSelectizeInput(session,'clusterNum2',
+                         choices=levels(ngsData), selected = 1)
+    
+  }
+  
+})
+
 
 observe({
   DEclusterReactive1()
@@ -30,8 +47,13 @@ DEclusterReactive1 <-
                   withProgress(message = "Performing the DE analysis, please wait",{
                     print("DEclusterReactive")
                     
-                    ngsData <- clusteringReactive()$ngsData
-                    
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
+                      
                     # find markers for every cluster compared to all remaining cells
                     ngsData.markers <- FindAllMarkers(ngsData, only.pos = input$onlyPos, min.pct = input$min.pct, logfc.threshold = input$logfcThreshold,test.use = input$DEtests) 
                     #DEanalysis$ngsData.markers <- ngsData.markers
@@ -43,7 +65,9 @@ DEclusterReactive1 <-
                       output$DEclusterTable <- DT::renderDataTable((ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC)))
                     }
                   return(list("clusters"= ngsData.markers))  
-                })}
+                }
+                  )
+                  }
   )
 
 observe({
@@ -55,7 +79,12 @@ DEclusterReactive2 <-
                   withProgress(message = "Performing the DE analysis, please wait",{
                     print("DEclusterReactive2")
                     
-                    ngsData <- clusteringReactive()$ngsData
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
                     
                     # find markers for every cluster compared to all remaining cells
                     ngsData.markers1 <- FindMarkers(ngsData, ident.1 = input$clusterNum, only.pos = input$onlyPos1, min.pct = input$min.pct1, logfc.threshold = input$logfcThreshold1,test.use = input$DEtests1) 
@@ -80,7 +109,12 @@ DEclusterReactive3 <-
                   withProgress(message = "Performing the DE analysis, please wait",{
                     print("DEclusterReactive3")
                     
-                    ngsData <- clusteringReactive()$ngsData
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
                     
                     # find markers for every cluster compared to all remaining cells
                     ngsData.markers2 <- FindMarkers(ngsData, ident.1 = input$clusterNum1, ident.2 = input$clusterNum2,only.pos = input$onlyPos2, min.pct = input$min.pct2, logfc.threshold = input$logfcThreshold2,test.use = input$DEtests2) 
@@ -109,7 +143,12 @@ DEclusterReactive4 <-
                   validate(need(DEclusterReactive1()$clusters,
                                 message = "You need to find all markers for all clusters previously. this can be done in the Find all markers tab."))
                   
-                  ngsData <- clusteringReactive()$ngsData
+                  if(!is.null(loadClusteringReactive())){
+                    ngsData <- loadClusteringReactive()$ngsData
+                  }
+                  else {
+                    ngsData <- clusteringReactive()$ngsData
+                  }
                   clusters <- DEclusterReactive1()$clusters
                   
                   selectedGenes <- (clusters %>% group_by(cluster) %>% top_n(n = input$DEgenNumb3, wt = avg_logFC)) 
