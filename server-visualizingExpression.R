@@ -14,6 +14,20 @@ observe({
 })
 
 observe({
+  
+  if(!is.null(loadClusteringReactive())){ 
+    
+    ngsData = loadClusteringReactive()$ngsData
+    
+    genesToPlot = rownames( GetAssayData(ngsData, slot = "scale.data") )
+    updateSelectizeInput(session,'genesToVlnPlot', choices=genesToPlot)
+    updateSelectizeInput(session,'genesToFeaturePlot', choices=genesToPlot)
+    updateSelectizeInput(session,'genesToRidgePlot', choices=genesToPlot)
+  }
+  
+})
+
+observe({
   violinReactive()
 })
 
@@ -24,7 +38,12 @@ violinReactive <-
                   withProgress(message = "Preparing the Violin plot, please wait",{
                     print("DEclusterReactive")
                     
-                    ngsData <- clusteringReactive()$ngsData
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
                     
                     output$violinPlot <- renderPlot(VlnPlot(ngsData, features = input$genesToVlnPlot, slot = "counts", log = input$selectLog))
                   })
@@ -41,7 +60,12 @@ featureReactive <-
                   withProgress(message = "Performing the DE analysis, please wait",{
                     print("DEclusterReactive")
                     
-                    ngsData <- clusteringReactive()$ngsData
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
                     
                     output$featurePlot <- renderPlot(FeaturePlot(ngsData, features = input$genesToFeaturePlot))
                   })
@@ -58,7 +82,12 @@ ridgeReactive <-
                   withProgress(message = "Performing the DE analysis, please wait",{
                     print("DEclusterReactive")
                     
-                    ngsData <- clusteringReactive()$ngsData
+                    if(!is.null(loadClusteringReactive())){
+                      ngsData <- loadClusteringReactive()$ngsData
+                    }
+                    else {
+                      ngsData <- clusteringReactive()$ngsData
+                    }
                     
                     output$ridgePlot <- renderPlot(RidgePlot(ngsData, features = input$genesToRidgePlot))
                   })
