@@ -3,7 +3,7 @@ tabItem(tabName = "datainput",
         fluidPage(
           sidebarLayout(
             sidebarPanel(
-              tags$style("#nextStep1 {font-size:16px;color:red;display:block;position:relative;text-align:center; }"),
+              tags$style("#nextStep1 {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
               radioButtons("datatype", "Select the Data",
                            c("nonUMI Dataset" = "uploadNonUmi",
                              "10X Dataset" = "10xdata",

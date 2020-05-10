@@ -15,7 +15,7 @@ pcaReactive <-
                     # Examine and visualize PCA results a few different ways
                     output$renderprint <- renderPrint({print(ngsData[["pca"]], dims = 1:input$PCs_to_Show, nfeatures = input$genes_to_Show)})
                   })
-                  
+                  output$nextStepDimensionality <- renderText({"Explore the PCA visualizations or go to the next step: Determine the Dimensionality"})
                   return(list("ngsData"=ngsData))  
                   }
                 )

@@ -17,7 +17,7 @@ dimensionalityReactive <-
                     output$dimSelPlot <- renderPlot(JackStrawPlot(ngsData, dims = 1:input$dimNumGraph))
                     output$elbowPlot <- renderPlot(ElbowPlot(ngsData))
                   })
-                  
+                  output$nextStepClustering <- renderText({"Next step: Cell Clustering"})
                   return(list("ngsData"=ngsData))  
                 }
   )

@@ -111,7 +111,7 @@ reactiveSeuratObject <- eventReactive(input$upload_data,
                                      #names.delim = "\\-", names.field = 2
                                      shiny::setProgress(value = 0.8, detail = "Done.")
                                      print(ngsData)
-                                     output$nextStep1 <- renderText({"You can continue with the QC & Filter step"})
+                                     output$nextStep1 <- renderText({"Next step: QC & Filter"})
                                      return(list("ngsData"=ngsData))
                                    })
                                  }

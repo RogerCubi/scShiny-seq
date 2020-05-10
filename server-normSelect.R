@@ -35,6 +35,7 @@ normalizeReactive <-
                     shiny::setProgress(value = 0.8, detail = " Scaling data ...")
                     all.genes <- rownames(ngsData)
                     ngsData <- ScaleData(ngsData, features = all.genes)
+                    output$nextStepDimRed <- renderText({"Next step: Linear dimensional reduction"})
                     return(list('ngsData'=ngsData))                      
                   })})
 

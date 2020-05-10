@@ -19,9 +19,15 @@ tabItem(tabName = "filterNormSelectTab",
                column(6,
                       selectInput("selmethod", "Selection Method", choices = "vst")),
                column(6,
-                      numericInput("nfeatures", "Features number", value = 2000, min = 0, max = Inf)),
+                      numericInput("nfeatures", "Features number", value = 2000, min = 0, max = Inf))),
+        column(12,  
                column(6,
-                      numericInput("points", "Features to show", value = 10, min = 0, max = 200))
+                      p(strong("Validate selection")),
+                      actionButton("submit_norm","Normalize / Find Var. Features / Scale Data", style = "width: 100%")),
+               column(6,
+                      numericInput("points", "Features to show", value = 10, min = 0, max = 200)),
+               # column(6,
+               #        actionButton("submit_norm","Normalize / Find Var. Features / Scale Data", style = "width: 100%")),
                # column(6,
                #        selectInput("meanFunc", "Mean Function", choices = "ExpMean")),
                # column(6,
@@ -39,12 +45,15 @@ tabItem(tabName = "filterNormSelectTab",
         #        h4(strong("Scaling the data and removing unwanted sources of variation")),
         #        selectInput("scale_var", "Variables to regress out", choices = "nCount_RNA", multiple = FALSE)),
         hr(),
-        column(12,
-               actionButton("submit_norm","Normalize / Find Var. Features / Scale Data", style = "width: 100%")),
         hr(),
+        fluidRow(column(12)),
         fluidRow(column(12,
                plotOutput("feature_scatter"))
-               )
+               ),
+        fluidRow(column(12,
+                        tags$style("#nextStepDimRed {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
+                        textOutput("nextStepDimRed")
+                        ))
         
         )
 )

@@ -21,7 +21,7 @@ clusteringReactive <-
                     output$umapPlot <- renderPlot(DimPlot(ngsData, reduction = "umap"))
 
                   })
-                  
+                  output$nextStepSaveOrDE <- renderText({"Next step: Save the analysis file or continue to the differentially expressed genes"})
                   return(list("ngsData"=ngsData))  
                 }
   )

@@ -149,6 +149,7 @@ analyzeThresholdReactive <-
                                       nCount_RNA > input$countsThreshold[1] & nCount_RNA < input$countsThreshold[2] &
                                       percent.mt < input$mitocondrialThreshold)
                   print("done")
+                  output$nextStepNormalization <- renderText({"Next step: Normalization"})
                   return(list('ngsData'=ngsData)) }
                 }
   )

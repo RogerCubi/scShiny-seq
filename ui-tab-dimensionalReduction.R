@@ -6,7 +6,9 @@ tabItem(tabName = "pcaTab",
             sidebarPanel(
               numericInput(inputId = "PCs_to_Show", label =  "Number of PCs to show", value = 6, min = 1, max = Inf, step = 1),
               numericInput(inputId = "genes_to_Show", label =  "Number of Genes to show", value = 5, min = 1, max = Inf, step = 1),
-              actionButton(inputId = "pcaImput", label = "Validate Selection")
+              actionButton(inputId = "pcaImput", label = "Validate Selection"),
+              tags$style("#nextStepDimensionality {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
+              textOutput("nextStepDimensionality")
             ),
             mainPanel(
               verbatimTextOutput("renderprint")
