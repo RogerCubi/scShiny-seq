@@ -10,7 +10,15 @@ tabItem(tabName = "clusteringTab",
               textOutput("nextStepSaveOrDE")
             ),
             mainPanel(
-              plotOutput("umapPlot")
+              plotOutput("umapPlot"),
+              conditionalPanel("output.downloadClusteringPlot",
+                               h4(strong("Plot download options")),
+                               column(6,numericInput(inputId = "widthUmap",label = "Plot width (in cm)", value = 15,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "heightUmap",label = "Plot height (in cm)", value = 10,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "dpiUmap",label = "Plot resolution", value = 300,min = 1,max = 1000)),
+                               column(6,selectInput(inputId = "deviceUmap",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png")),
+                               downloadButton("downloadUmapPlot", "Download")
+              ) # ConditionalPanel
             )# mainPanel
           )
         ),

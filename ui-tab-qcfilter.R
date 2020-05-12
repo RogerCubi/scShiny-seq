@@ -45,16 +45,17 @@ tabItem(tabName = "qcFilterTab",
                        ),
                 column(12,
                        plotOutput("qc_scatter"),
-                       column(6,wellPanel(h4(strong("Plot download options")),
-                                 numericInput(inputId = "widthS",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
-                                 numericInput(inputId = "heightS",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
-                                 numericInput(inputId = "dpiS",label = "Plot resolution", value = 300,min = 1,max = 1000),
-                                 selectInput(inputId = "deviceS",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
-                                 downloadButton("downloadScatter", "Download"))
+                       column(12,h4(strong("Plot download options")),
+                              column(6,numericInput(inputId = "widthS",label = "Plot width (in cm)", value = 15,min = 1,max = 100)),
+                              column(6,numericInput(inputId = "heightS",label = "Plot height (in cm)", value = 10,min = 1,max = 100)),
+                              column(6,numericInput(inputId = "dpiS",label = "Plot resolution", value = 300,min = 1,max = 1000)),
+                              column(6,selectInput(inputId = "deviceS",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png")),
+                              downloadButton("downloadScatter", "Download")
                               )
-                       ),
-                
-                       ), # fluidRow
+                       )
+                       
+                ), # fluidRow
+        hr(),
         fluidRow(column(6,
                         verticalLayout(
                                 tags$style("#numberCellsThreshold {font-size:16px;color:black;display:block;position:relative;text-align:left; }"),

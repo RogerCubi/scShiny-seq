@@ -30,7 +30,7 @@ dimensionalityReactive <-
                     plotElbow <- ElbowPlot(ngsData)
                     output$elbowPlot <- renderPlot(plotElbow)
                     
-                    #Save JackStrawPlot 
+                    #Save ElbowPlot 
                     output$downloadElbowPlot <- downloadHandler(
                       filename = function() {
                         paste0("ElbowPlot.", input$deviceElb)
@@ -51,3 +51,5 @@ output$downloadDimensionsPlot <- reactive({
   
 })
 outputOptions(output, 'downloadDimensionsPlot', suspendWhenHidden=FALSE)
+
+
