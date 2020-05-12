@@ -35,7 +35,31 @@ tabItem(tabName = "pcaTab",
               actionButton(inputId = "pcaGraphImput", label = "Validate Selection")
             ), # sidebarPanel
             mainPanel(
-              plotOutput("dimRedPlot")
+              plotOutput("dimRedPlot"),
+              conditionalPanel("output.downloadPCA && input.visualizePCA == 'VizDimReduction'",
+                               h4(strong("Plot download options")),
+                               numericInput(inputId = "widthViz",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                               numericInput(inputId = "heightViz",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                               numericInput(inputId = "dpiViz",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                               selectInput(inputId = "deviceViz",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                               downloadButton("downloadVizDimReduction", "Download")
+              ), # ConditionalPanel
+              conditionalPanel("output.downloadPCA && input.visualizePCA == 'DimPlot'",
+                               h4(strong("Plot download options")),
+                               numericInput(inputId = "widthPCA",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                               numericInput(inputId = "heightPCA",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                               numericInput(inputId = "dpiPCA",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                               selectInput(inputId = "devicePCA",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                               downloadButton("downloadPCAplot", "Download")
+              ), # ConditionalPanel
+              conditionalPanel("output.downloadPCA && input.visualizePCA == 'DimHeatmap'",
+                               h4(strong("Plot download options")),
+                               numericInput(inputId = "widthHeatmap",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                               numericInput(inputId = "heightHeatmap",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                               numericInput(inputId = "dpiHeatmap",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                               selectInput(inputId = "deviceHeatmap",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                               downloadButton("downloadDimHeatmap", "Download")
+              ) # ConditionalPanel
             )# mainPanel
           )
         ))

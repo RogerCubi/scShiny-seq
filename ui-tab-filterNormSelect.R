@@ -48,8 +48,24 @@ tabItem(tabName = "filterNormSelectTab",
         hr(),
         fluidRow(column(12)),
         fluidRow(column(12,
-               plotOutput("feature_scatter"))
+               plotOutput("feature_scatter")),
+               conditionalPanel("output.downloadNormalizeReactive",
+                                
+               column(6,wellPanel(h4(strong("Plot download options")),
+                                  numericInput(inputId = "widthFS1",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                                  numericInput(inputId = "heightFS1",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                                  numericInput(inputId = "dpiFS1",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                                  selectInput(inputId = "deviceFS1",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                                  downloadButton("downloadFeatureScatter1", "Download"))
                ),
+               column(6,wellPanel(h4(strong("Plot download options")),
+                                  numericInput(inputId = "widthFS2",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                                  numericInput(inputId = "heightFS2",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                                  numericInput(inputId = "dpiFS2",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                                  selectInput(inputId = "deviceFS2",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                                  downloadButton("downloadFeatureScatter2", "Download"))
+               )
+               )),
         fluidRow(column(12,
                         tags$style("#nextStepDimRed {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
                         textOutput("nextStepDimRed")

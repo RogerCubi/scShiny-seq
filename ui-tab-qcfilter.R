@@ -6,7 +6,7 @@ tabItem(tabName = "qcFilterTab",
                 column(12,
                        column(4,
                               verticalLayout(plotOutput("violinFeature"),
-                                             sliderInput("featureThreshold", label = "Feature threshold selection", min = 0, 
+                                             sliderInput("featureThreshold", label = "Features threshold selection", min = 0, 
                                                          max = 100, value = c(0, 100)),
                                              textOutput("numberCellsFeature"),
                                              wellPanel(h4(strong("Plot download options")),
@@ -19,7 +19,7 @@ tabItem(tabName = "qcFilterTab",
                        
                        column(4,
                               verticalLayout(plotOutput("violinCounts"),
-                                             sliderInput("countsThreshold", label = "Feature threshold selection", min = 0, 
+                                             sliderInput("countsThreshold", label = "Counts threshold selection", min = 0, 
                                                          max = 100, value = c(0, 100)),
                                              textOutput("numberCellsCounts"),
                                              wellPanel(h4(strong("Plot download options")),
@@ -31,7 +31,7 @@ tabItem(tabName = "qcFilterTab",
                                              ))),
                        column(4,
                               verticalLayout(plotOutput("violinMito"),
-                                             sliderInput("mitocondrialThreshold", label = "Feature threshold selection", min = 0, 
+                                             sliderInput("mitocondrialThreshold", label = "% Mitocondrial threshold selection", min = 0, 
                                                          max = 100, value =  100),
                                              textOutput("numberCellsMito"),
                                              wellPanel(h4(strong("Plot download options")),
@@ -42,7 +42,18 @@ tabItem(tabName = "qcFilterTab",
                                                        downloadButton("downloadMitoThreshold", "Download")
                                              )))
                        
-                       )
+                       ),
+                column(12,
+                       plotOutput("qc_scatter"),
+                       column(6,wellPanel(h4(strong("Plot download options")),
+                                 numericInput(inputId = "widthS",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
+                                 numericInput(inputId = "heightS",label = "Plot height (in cm)", value = 10,min = 1,max = 100),
+                                 numericInput(inputId = "dpiS",label = "Plot resolution", value = 300,min = 1,max = 1000),
+                                 selectInput(inputId = "deviceS",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png"),
+                                 downloadButton("downloadScatter", "Download"))
+                              )
+                       ),
+                
                        ), # fluidRow
         fluidRow(column(6,
                         verticalLayout(
