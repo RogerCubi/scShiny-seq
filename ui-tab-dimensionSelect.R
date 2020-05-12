@@ -12,11 +12,27 @@ tabItem(tabName = "dimTab",
             ),
             mainPanel(
               plotOutput("dimSelPlot"),
+              conditionalPanel("output.downloadDimensionsPlot",
+                               h4(strong("Plot download options")),
+                               column(6,numericInput(inputId = "widthDim",label = "Plot width (in cm)", value = 15,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "heightDim",label = "Plot height (in cm)", value = 10,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "dpiDim",label = "Plot resolution", value = 300,min = 1,max = 1000)),
+                               column(6,selectInput(inputId = "deviceDim",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png")),
+                               downloadButton("downloadDimplot", "Download")
+              ), # ConditionalPanel
               hr(),
-              plotOutput("elbowPlot")
+              plotOutput("elbowPlot"),
+              conditionalPanel("output.downloadDimensionsPlot",
+                               h4(strong("Plot download options")),
+                               column(6,numericInput(inputId = "widthElb",label = "Plot width (in cm)", value = 15,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "heightElb",label = "Plot height (in cm)", value = 10,min = 1,max = 100)),
+                               column(6,numericInput(inputId = "dpiElb",label = "Plot resolution", value = 300,min = 1,max = 1000)),
+                               column(6,selectInput(inputId = "deviceElb",label = "File type",choices = c("png","pdf","jpeg", "tiff", "bmp", "svg"), selected = "png")),
+                               downloadButton("downloadElbowPlot", "Download")
+              ) # ConditionalPanel
             )# mainPanel
           )
-        ),
+        )
 )
 
 
