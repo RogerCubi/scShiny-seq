@@ -48,26 +48,68 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                    minThreshMt = minThreshMtA - 0.05*(maxThreshMtA - minThreshMtA)
                                    maxThreshMt = maxThreshMtA + 0.05*(maxThreshMtA - minThreshMtA)
                                    
+                                   
                                    output$violinFeature <- renderPlot(VlnPlot(ngsData, features = "nFeature_RNA", ncol = 1,cols= "red",group.by = "orig.ident") %>%
-                                                                        + geom_hline(yintercept = input$featureThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
-                                                                        + geom_text(x=1,y=input$featureThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
-                                                                        + geom_hline(yintercept = input$featureThreshold[2],color = 'blue',linetype = "dashed", size = 1) %>%
-                                                                        + geom_text(x=1,y=input$featureThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "blue",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
+                                                                        + geom_hline(yintercept = input$featureThreshold[1],color = 'blue',linetype = "dashed", size = 1) %>%
+                                                                        + geom_text(x=1,y=input$featureThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "blue",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                                        + geom_hline(yintercept = input$featureThreshold[2],color = 'red',linetype = "dashed", size = 1) %>%
+                                                                        + geom_text(x=1,y=input$featureThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "red",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
                                                                         + scale_y_continuous(limits=c(minThreshFeatures - 0.1*(maxThreshFeatures - minThreshFeatures),maxThreshFeatures + 0.1*(maxThreshFeatures - minThreshFeatures)))
-                                                                      
+
                                                                       )
+                                   output$downloadFeatureThreshold <- downloadHandler(
+                                     filename = function() {
+                                       paste0("thresholdFeatures.", input$deviceF)
+                                     },
+                                     content = function(file) {
+                                       ggsave(file, plot= VlnPlot(ngsData, features = "nFeature_RNA", ncol = 1,cols= "red",group.by = "orig.ident") %>%
+                                                + geom_hline(yintercept = input$featureThreshold[1],color = 'blue',linetype = "dashed", size = 1) %>%
+                                                + geom_text(x=1,y=input$featureThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "blue",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                + geom_hline(yintercept = input$featureThreshold[2],color = 'red',linetype = "dashed", size = 1) %>%
+                                                + geom_text(x=1,y=input$featureThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "red",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
+                                                + scale_y_continuous(limits=c(minThreshFeatures - 0.1*(maxThreshFeatures - minThreshFeatures),maxThreshFeatures + 0.1*(maxThreshFeatures - minThreshFeatures))), device = input$deviceF, width = input$widthF, height = input$heightF, units = "cm", dpi = input$dpiF)
+                                     }
+                                   )
+
+                                   
                                    output$violinCounts <- renderPlot(VlnPlot(ngsData, features = "nCount_RNA", ncol = 1,cols= "red")%>%
-                                                                       + geom_hline(yintercept = input$countsThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
-                                                                       + geom_text(x=1,y=input$countsThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
-                                                                       + geom_hline(yintercept = input$countsThreshold[2],color = 'blue',linetype = "dashed", size = 1) %>%
-                                                                       + geom_text(x=1,y=input$countsThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "blue",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
+                                                                       + geom_hline(yintercept = input$countsThreshold[1],color = 'blue',linetype = "dashed", size = 1) %>%
+                                                                       + geom_text(x=1,y=input$countsThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "blue",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                                       + geom_hline(yintercept = input$countsThreshold[2],color = 'red',linetype = "dashed", size = 1) %>%
+                                                                       + geom_text(x=1,y=input$countsThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "red",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
                                                                        + scale_y_continuous(limits=c(minThreshCounts - 0.1*(maxThreshCounts - minThreshCounts),maxThreshCounts + 0.1*(maxThreshCounts - minThreshCounts)))
                                                                      
                                                                      )
+                                   output$downloadCountsThreshold <- downloadHandler(
+                                     filename = function() {
+                                       paste0("thresholdCounts.", input$deviceC)
+                                     },
+                                     content = function(file) {
+                                       ggsave(file, VlnPlot(ngsData, features = "nCount_RNA", ncol = 1,cols= "red")%>%
+                                                + geom_hline(yintercept = input$countsThreshold[1],color = 'blue',linetype = "dashed", size = 1) %>%
+                                                + geom_text(x=1,y=input$countsThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "blue",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                + geom_hline(yintercept = input$countsThreshold[2],color = 'red',linetype = "dashed", size = 1) %>%
+                                                + geom_text(x=1,y=input$countsThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "red",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
+                                                + scale_y_continuous(limits=c(minThreshCounts - 0.1*(maxThreshCounts - minThreshCounts),maxThreshCounts + 0.1*(maxThreshCounts - minThreshCounts))), device = input$deviceC, width = input$widthC, height = input$heightC, units = "cm", dpi = input$dpiC)
+                                     }
+                                   )
+                                   
                                    output$violinMito <- renderPlot(VlnPlot(ngsData, features = "percent.mt", ncol = 1,cols= "red")%>%
                                                                      + geom_hline(yintercept = input$mitocondrialThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
-                                                                     + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=2, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                                     + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=-1, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
                                                                      + scale_y_continuous(limits=c(minThreshMt - 0.1*(maxThreshMt - minThreshMt),maxThreshMt + 0.5*(maxThreshMt - minThreshMt)))
+                                   )
+                                   
+                                   output$downloadMitoThreshold <- downloadHandler(
+                                     filename = function() {
+                                       paste0("thresholdCounts.", input$deviceM)
+                                     },
+                                     content = function(file) {
+                                       ggsave(file, VlnPlot(ngsData, features = "percent.mt", ncol = 1,cols= "red")%>%
+                                                + geom_hline(yintercept = input$mitocondrialThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
+                                                + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=-1, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+                                                + scale_y_continuous(limits=c(minThreshMt - 0.1*(maxThreshMt - minThreshMt),maxThreshMt + 0.5*(maxThreshMt - minThreshMt))), device = input$deviceM, width = input$widthM, height = input$heightM, units = "cm", dpi = input$dpiM)
+                                     }
                                    )
                                    
                                    # Text Output Feature
@@ -115,21 +157,6 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                      paste0("Overall threshold selection returns ",nrow(allDataThreshold), " cells of a total of ", nrow(featureData))
                                    })
                                    return(list('ngsData'=ngsData))
-                                   # analyzeThresholdReactive <-
-                                   #   eventReactive(input$submit_threshold,
-                                   #                 ignoreNULL = TRUE, {
-                                   #                   ngsData <- subset(ngsData, subset = nFeature_RNA > input$featureThreshold[1] & nFeature_RNA < input$featureThreshold[2] &
-                                   #                                       nCount_RNA > countsThreshold[1] & nCount_RNA < countsThreshold[2] &
-                                   #                                       percent.mt < input$mitocondrialThreshold)
-                                   #                   #print("done")
-                                   #                   return(list('ngsData'=ngsData)) 
-                                   #                 }
-                                   #   )
-                                   # 
-                                   # if (!is.null(analyzeThresholdReactive()$ngsData)){
-                                   #   print("done")
-                                   #   return(list('ngsData'=ngsData))
-                                   # }
                                  }
                                  }
                                ) # ThresholdDataReactive
@@ -155,113 +182,23 @@ analyzeThresholdReactive <-
   )
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# observe({
-#   analyzeDataReactive()
-# })
+# plotThreshold <- reactive()
+# plotThreshold$feature_RNA <- (VlnPlot(ngsData, features = "nFeature_RNA", ncol = 1,cols= "red",group.by = "orig.ident") %>%
+#                                 + geom_hline(yintercept = input$featureThreshold[1],color = 'blue',linetype = "dashed", size = 1) %>%
+#                                 + geom_text(x=1,y=input$featureThreshold[1], label="low.threshold", vjust=2, hjust=0,color = "blue",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
+#                                 + geom_hline(yintercept = input$featureThreshold[2],color = 'red',linetype = "dashed", size = 1) %>%
+#                                 + geom_text(x=1,y=input$featureThreshold[2], label="high.threshold", vjust=-1, hjust=0, color = "red",size = 5,fontface = "bold", alpha = 0.5, family=c("serif", "mono")[2]) %>%
+#                                 + scale_y_continuous(limits=c(minThreshFeatures - 0.1*(maxThreshFeatures - minThreshFeatures),maxThreshFeatures + 0.1*(maxThreshFeatures - minThreshFeatures)))
+#                               
+# )
+# output$violinFeature <- renderPlot(plotThreshold()$feature_RNA)
+# # Downloadable csv of selected dataset ----
+# output$downloadFeatureThreshold <- downloadHandler(
+#   filename = function() {
+#     paste("input$violinFeature", input$device, sep = "")
+#   },
+#   content = function(file) {
+#     ggsave(file, plot= plotThreshold()$feature_RNA)
+#   }
+# )
 # 
-# analyzeDataReactive <-
-#   eventReactive(input$submit_data,
-#                 ignoreNULL = FALSE, {
-#                   withProgress(message = "Analyzing Single Cell data, please wait",{
-#                     print("analysisCountDataReactive")
-#                     
-#                     ngsData <- reactiveSeuratObject()$ngsData
-#                     
-#                     shiny::setProgress(value = 0.3, detail = " Applying Filters ...")
-#                     
-#                     #######
-#                     #ngsRawData <- GetAssayData(object = ngsData, slot = "counts")
-#                     
-#                     if(input$mitoFilter == TRUE)
-#                     {
-#                       ngsData[["percent.mt"]] <- PercentageFeatureSet(ngsData, pattern = "^MT-")
-#                       output$qc_violin <- renderPlot(VlnPlot(ngsData, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3,cols= "red"))
-#                       plot1 <- FeatureScatter(ngsData, feature1 = "nCount_RNA", feature2 = "percent.mt",cols= "red")
-#                       plot2 <- FeatureScatter(ngsData, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols= "red")
-#                       output$qc_scatter <- renderPlot(plot1 + plot2)
-#                     }
-#                     else{
-#                       output$qc_violin <- renderPlot(VlnPlot(ngsData, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2,cols= "red"))
-#                       output$qc_scatter <- renderPlot(FeatureScatter(ngsData, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols= "red"))
-#                     }
-#                     
-#                     return(list('ngsData'=ngsData))                      
-#                   })})
-# 
-# 
-# # Threshold_val <- reactive({
-# #   min_thresh <- input$minThreshold
-# #   max_thresh <- input$maxThreshold
-# #   max_mito <-  input$maxMito
-# # })
-# 
-# # Threshold_val1 <- reactive({input$minThreshold
-# # })
-# # Threshold_val2 <- reactive({input$maxThreshold
-# # })
-# # Threshold_val3 <- reactive({input$maxMito
-# # })
-# 
-# 
-# 
-# 
-# observe({
-#   analyzeThresholdReactive()
-# })
-# analyzeThresholdReactive <-
-#   eventReactive(input$submit_threshold,
-#                 ignoreNULL = TRUE, {
-#                   print(input$maxThreshold)
-#                   print(input$minThreshold)
-#                   print(input$maxMito)
-# 
-#                   ngsData <- reactiveSeuratObject()$ngsData
-#                   ngsData[["percent.mt"]] <- PercentageFeatureSet(ngsData, pattern = "^MT-")
-#                   ngsData <- subset(ngsData, subset = nFeature_RNA > 200 & nFeature_RNA < 2000 & percent.mt < 5)
-#                   # withProgress(message = "Threshold selected",{
-#                   #   print("Threshold_selected")
-#                   # 
-#                   #   ngsData <- reactiveSeuratObject()$ngsData
-#                   #   ngsData[["percent.mt"]] <- PercentageFeatureSet(ngsData, pattern = "^MT-")
-#                   #   shiny:: validate(
-#                   #     need(!is.null(input$minThreshold)&&!is.null(input$maxThreshold)&&!is.null(input$maxMito),
-#                   #          message = "You need to add a valid number")
-#                   #   )
-#                   #   #######
-#                   # 
-#                     # min_thresh <-  input$minThreshold
-#                     # max_thresh <-  input$maxThreshold
-#                     # max_mito <-  input$maxMito
-#                     # print(min_thresh)
-#                     # print(max_thresh)
-#                     # print(max_mito)
-#                     #pbmcRawData <- GetAssayData(object = pbmc, slot = "counts")
-#                     #ngsData <- subset(ngsData, subset = nFeature_RNA > min_thresh & nFeature_RNA < max_thresh & percent.mt < max_mito)
-#                     #ngsData <- subset(ngsData, subset = nFeature_RNA > Threshold_val1() & nFeature_RNA < Threshold_val2() & percent.mt < Threshold_val3())
-#                     #ngsData <- subset(ngsData, subset = nFeature_RNA > 200 & nFeature_RNA < 2000 & percent.mt < 5)
-# 
-#                     #ngsData <- subset(ngsData, subset = nFeature_RNA > input$minThreshold & nFeature_RNA < input$maxThreshold & percent.mt < input$maxMito)
-#                     # if(input$mitoFilter == TRUE)
-#                     # {
-#                     #   ngsData <- subset(ngsData, subset = nFeature_RNA > input$minThreshold & nFeature_RNA < input$maxThreshold & percent.mt < input$maxMito)
-#                     # }
-#                     # else{
-#                     #   ngsData <- subset(ngsData, subset = nFeature_RNA > input$minThreshold & nFeature_RNA < input$maxThreshold)
-#                     # }
-#                   print("done")
-#                   return(list('ngsData'=ngsData)) 
-#                   # 
-#                   #   })
-#                   })

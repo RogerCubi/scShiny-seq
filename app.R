@@ -15,10 +15,16 @@ library(patchwork)
 library(shinyFiles)
 library(DT)
 library(ggplot2)
+library(DESeq2)
+library(MAST)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
 # 
 # BiocManager::install("DESeq2")
+# BiocManager::install("MAST")
+# BiocManager::install("SingleCellExperiment")
+# BiocManager::install("SC3")
+# BiocManager::install("scater")
 
 # Define UI for application that draws a histogram
 ui <- tagList(
