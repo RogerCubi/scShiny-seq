@@ -4,7 +4,7 @@ tabItem(tabName = "plotMarkerTab",
           tabsetPanel(
             tabPanel(title = "Violin plot",
                      selectInput(inputId = "genesToVlnPlot",label = "Select the genes to plot",choices = c(), multiple = TRUE),
-                     checkboxInput(inputId = "selectLog",label = 'Use logaritmic units',value = FALSE),
+                     checkboxInput(inputId = "selectLog",label = 'Use logaritmic scale',value = FALSE),
                      actionButton(inputId = "validateVlnPlot",label = "Validate selection"),
                      plotOutput("violinPlot")
             ),

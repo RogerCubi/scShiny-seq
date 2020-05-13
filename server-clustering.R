@@ -16,20 +16,27 @@ clusteringReactive <-
                   withProgress(message = "Running non-linear dimensional reduction (UMAP/tSNE), please wait",{
 
                     ngsData <- RunUMAP(ngsData, dims = 1:input$dimNumClustering)
+                    ngsData <- RunTSNE(ngsData, dims = 1:input$dimNumClustering, method = "FIt-SNE")
 
-                    # Examine and visualize PCA results a few different ways
-                    plotUmap <- DimPlot(ngsData, reduction = "umap")
-                    output$umapPlot <- renderPlot(plotUmap)
-                    
-                    #Save ElbowPlot 
-                    output$downloadUmapPlot <- downloadHandler(
-                      filename = function() {
-                        paste0("umapPlot.", input$deviceUmap)
-                      },
-                      content = function(file) {
-                        ggsave(file, plotUmap, device = input$deviceUmap, width = input$widthUmap, height = input$heightUmap, units = "cm", dpi = input$dpiUmap)
-                      }
-                    )
+                    # # Examine and visualize PCA results a few different ways
+                    # 
+                    # if (input$reductTech == "umap"){
+                    #   plotUmapTsne <- DimPlot(ngsData, reduction = input$reductTech)
+                    # }
+                    # else{
+                    #   plotUmapTsne <- DimPlot(ngsData, reduction = input$reductTech)
+                    # }
+                    # output$tsneUmapPlot <- renderPlot(plotUmapTsne)
+                    # 
+                    # #Save ElbowPlot 
+                    # output$downloadUmapPlot <- downloadHandler(
+                    #   filename = function() {
+                    #     paste0(input$reductTech,".", input$deviceUmap)
+                    #   },
+                    #   content = function(file) {
+                    #     ggsave(file, plotUmapTsne, device = input$deviceUmap, width = input$widthUmap, height = input$heightUmap, units = "cm", dpi = input$dpiUmap)
+                    #   }
+                    # )
 
                   })
                   output$nextStepSaveOrDE <- renderText({"Next step: Save the analysis file or continue to the differentially expressed genes"})
@@ -37,6 +44,38 @@ clusteringReactive <-
                 }
   )
 
+
+observe(
+  clusteringPlot()
+)
+
+clusteringPlot <- reactive({
+  
+  ngsDataPlot <- clusteringReactive()$ngsData
+  # Examine and visualize PCA results a few different ways
+  
+if (!is.null(ngsDataPlot)){
+  if (input$reductTech == "umap"){
+    plotUmapTsne <- DimPlot(ngsDataPlot, reduction = input$reductTech)
+    output$tsneUmapPlot <- renderPlot(plotUmapTsne)
+  }
+  else if (input$reductTech == "tsne"){
+    plotUmapTsne <- DimPlot(ngsDataPlot, reduction = input$reductTech)
+    output$tsneUmapPlot <- renderPlot(plotUmapTsne)
+  }
+  
+  
+  #Save ElbowPlot 
+  output$downloadUmapPlot <- downloadHandler(
+    filename = function() {
+      paste0(input$reductTech,".", input$deviceUmap)
+    },
+    content = function(file) {
+      ggsave(file, plotUmapTsne, device = input$deviceUmap, width = input$widthUmap, height = input$heightUmap, units = "cm", dpi = input$dpiUmap)
+    }
+  )
+}}
+)
 
 output$downloadClusteringPlot <- reactive({
   
