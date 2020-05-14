@@ -45,9 +45,28 @@ violinReactive <-
                       ngsData <- clusteringReactive()$ngsData
                     }
                     
-                    output$violinPlot <- renderPlot(VlnPlot(ngsData, features = input$genesToVlnPlot, slot = "counts", log = input$selectLog))
+                    violin_Plot <- VlnPlot(ngsData, features = input$genesToVlnPlot, slot = "counts", log = input$selectLog)
+                    output$violinPlot <- renderPlot(violin_Plot)
+                    
+                    output$downloadViolinButton <- downloadHandler(
+                      filename = function() {
+                        paste0("VlnPlot",input$genesToVlnPlot,".",input$deviceViolinPlot)
+                      },
+                      content = function(file) {
+                        ggsave(file, violin_Plot, device = input$deviceViolinPlot, width = input$widthViolinPlot, height = input$heightViolinPlot, units = "cm", dpi = input$dpiViolinPlot)
+                      }
+                    )
+                    
                   })
                 })
+
+
+output$downloadViolinPlot <- reactive({
+  
+  return(!is.null(violinReactive()))
+  
+})
+outputOptions(output, 'downloadViolinPlot', suspendWhenHidden=FALSE)
 
 observe({
   featureReactive()
@@ -73,8 +92,25 @@ featureReactive <-
                     else if (input$reductTechFeature == "tsne"){
                       output$featurePlot <- renderPlot(FeaturePlot(ngsData, features = input$genesToFeaturePlot, reduction = input$reductTechFeature))
                     }
+
+                    #Downloading functions
+                    output$downloadFeaturePlotButton <- downloadHandler(
+                      filename = function() {
+                        paste0("FeaturePlot",input$genesToFeaturePlot,".",input$deviceFeaturePlot)
+                      },
+                      content = function(file) {
+                        ggsave(file, FeaturePlot(ngsData, features = input$genesToFeaturePlot, reduction = input$reductTechFeature), device = input$deviceFeaturePlot, width = input$widthFeaturePlot, height = input$heightFeaturePlot, units = "cm", dpi = input$dpiFeaturePlot)
+                      }
+                    )
                   })
                 })
+
+output$downloadFeaturePlot <- reactive({
+  
+  return(!is.null(featureReactive()))
+  
+})
+outputOptions(output, 'downloadFeaturePlot', suspendWhenHidden=FALSE)
 
 observe({
   ridgeReactive()
@@ -94,6 +130,24 @@ ridgeReactive <-
                       ngsData <- clusteringReactive()$ngsData
                     }
                     
-                    output$ridgePlot <- renderPlot(RidgePlot(ngsData, features = input$genesToRidgePlot))
+                    ridge_plot <- RidgePlot(ngsData, features = input$genesToRidgePlot)
+                    output$ridgePlot <- renderPlot(ridge_plot)
+                    
+                    #Downloading functions
+                    output$downloadRidgePlotButton <- downloadHandler(
+                      filename = function() {
+                        paste0("FeaturePlot",input$genesToRidgePlot,".",input$deviceRidgePlot)
+                      },
+                      content = function(file) {
+                        ggsave(file, ridge_plot, device = input$deviceRidgePlot, width = input$widthRidgePlot, height = input$heightRidgePlot, units = "cm", dpi = input$dpiRidgePlot)
+                      }
+                    )
                   })
                 })
+
+output$downloadRidgePlot <- reactive({
+  
+  return(!is.null(ridgeReactive()))
+  
+})
+outputOptions(output, 'downloadRidgePlot', suspendWhenHidden=FALSE)
