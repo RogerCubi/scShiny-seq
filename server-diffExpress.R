@@ -59,16 +59,34 @@ DEclusterReactive1 <-
                     #DEanalysis$ngsData.markers <- ngsData.markers
                     print("Find markers done")
                     if (input$DEtests == "roc"){
-                      output$DEclusterTable <- DT::renderDataTable((ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = power)))
+                      table1 <- (ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = power))
+                      output$DEclusterTable <- DT::renderDataTable(table1)
                     }
                     else {
-                      output$DEclusterTable <- DT::renderDataTable((ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC)))
+                      table1 <- (ngsData.markers  %>% group_by(cluster) %>% top_n(n = input$DEgenNumb, wt = avg_logFC))
+                      output$DEclusterTable <- DT::renderDataTable(table1)
                     }
+                    
+                    output$downloadDEclusterTable <- downloadHandler(
+                      filename = function() {
+                        paste0("Clusters_DE",".csv")
+                      },
+                      content = function(file) {
+                        write.csv(table1, file, row.names = FALSE)
+                      }
+                    )
                   return(list("clusters"= ngsData.markers))  
                 }
                   )
                   }
   )
+
+output$reactive1Download <- reactive({
+  
+  return(!is.null(DEclusterReactive1()))
+  
+})
+outputOptions(output, 'reactive1Download', suspendWhenHidden=FALSE)
 
 observe({
   DEclusterReactive2()
@@ -91,14 +109,32 @@ DEclusterReactive2 <-
                     
                     print("Find markers done")
                     if (input$DEtests1 == "roc"){
-                      output$DEcluster1Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = power)))
+                      table2 <- (cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = power))
+                      output$DEcluster1Table <- DT::renderDataTable(table2)
                     }
                     else {
-                    output$DEcluster1Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = avg_logFC)))
+                      table2 <-(cbind(gene = rownames(ngsData.markers1),ngsData.markers1)  %>% top_n(n = input$DEgenNumb1, wt = avg_logFC))
+                      output$DEcluster1Table <- DT::renderDataTable(table2)
                     #output$DEcluster1Table <- DT::renderDataTable(head((cbind(gene = rownames(ngsData.markers1),ngsData.markers1)),input$DEgenNumb1))
                     }
+                    output$downloadDEcluster1Table <- downloadHandler(
+                      filename = function() {
+                        paste0("Cluster_",input$clusterNum,"_DE",".csv")
+                      },
+                      content = function(file) {
+                        write.csv(table2, file, row.names = FALSE)
+                      }
+                    )
+                    return(list("ngsData"=ngsData))
                   })}
   )
+
+output$reactive2Download <- reactive({
+  
+  return(!is.null(DEclusterReactive2()))
+  
+})
+outputOptions(output, 'reactive2Download', suspendWhenHidden=FALSE)
 
 observe({
 DEclusterReactive3()
@@ -122,13 +158,32 @@ DEclusterReactive3 <-
                     print("Find markers done")
                     
                     if (input$DEtests2 == "roc"){
-                      output$DEcluster2Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = power)))
+                      table3 <- (cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = power))
+                      output$DEcluster2Table <- DT::renderDataTable(table3)
                     }
                     else {
-                      output$DEcluster2Table <- DT::renderDataTable((cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = avg_logFC)))
+                      table3 <- (cbind(gene = rownames(ngsData.markers2),ngsData.markers2)  %>% top_n(n = input$DEgenNumb2, wt = avg_logFC))
+                      output$DEcluster2Table <- DT::renderDataTable(table3)
                     }
+                    
+                    output$downloadDEcluster2Table <- downloadHandler(
+                      filename = function() {
+                        paste0("Cluster_",input$clusterNum1,"Vs","cluster_",input$clusterNum2, ".csv")
+                      },
+                      content = function(file) {
+                        write.csv(table3, file, row.names = FALSE)
+                      }
+                    )
+                    return(list("ngsData"=ngsData))
                   })}
   )
+
+output$reactive3Download <- reactive({
+  
+  return(!is.null(DEclusterReactive3()))
+  
+})
+outputOptions(output, 'reactive3Download', suspendWhenHidden=FALSE)
 
 #heatmap
 observe({
@@ -153,14 +208,32 @@ DEclusterReactive4 <-
                   
                   selectedGenes <- (clusters %>% group_by(cluster) %>% top_n(n = input$DEgenNumb3, wt = avg_logFC)) 
                   
-                  output$clusterHeatmap <- renderPlot({DoHeatmap(ngsData, features = selectedGenes$gene) + NoLegend()})
+                  plotClusterHeatmap <- DoHeatmap(ngsData, features = selectedGenes$gene) %>%
+                    + NoLegend()
+                  
+                  output$clusterHeatmap <- renderPlot({plotClusterHeatmap})
+                  
+                  #Save DoHeatmap 
+                  output$downloadClusterHeatmap <- downloadHandler(
+                    filename = function() {
+                      paste0("DE_Heatmap",".", input$deviceClusterHeatmap)
+                    },
+                    content = function(file) {
+                      ggsave(file, plotClusterHeatmap, device = input$deviceClusterHeatmap, width = input$widthClusterHeatmap, height = input$heightClusterHeatmap, units = "cm", dpi = input$dpiClusterHeatmap)
+                    }
+                  )
                   
                   }) 
 
 
 
 
-
+output$downloadClusterHeatmapPlot <- reactive({
+  
+  return(!is.null(DEclusterReactive4()))
+  
+})
+outputOptions(output, 'downloadClusterHeatmapPlot', suspendWhenHidden=FALSE)
 
 
 
