@@ -7,7 +7,7 @@ output$downloadData <- downloadHandler(
     paste(input$projectname, ".rds", sep = "")
   },
   content = function(file) {
-    saveRDS(clusteringReactive(), file)
+    saveRDS(clusteringReactive()$ngsData, file)
   }
 )
 

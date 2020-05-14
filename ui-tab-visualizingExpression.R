@@ -10,8 +10,9 @@ tabItem(tabName = "plotMarkerTab",
             ),
             
             tabPanel(title = "Feature plot",
-                     selectInput(inputId = "genesToFeaturePlot",label = "Select the genes to plot",choices = c(), multiple = TRUE),
-                     actionButton(inputId = "validateFeaturePlot",label = "Validate selection"),
+                     column(6,selectInput(inputId = "genesToFeaturePlot",label = "Select the genes to plot",choices = c(), multiple = TRUE),
+                     actionButton(inputId = "validateFeaturePlot",label = "Validate selection")),
+                     column(6,radioButtons(inputId = "reductTechFeature", label = "Dimensional reduction technique",choices = c("umap","tsne"),inline = TRUE)),
                      plotOutput("featurePlot")
             ),
             

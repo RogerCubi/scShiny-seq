@@ -67,7 +67,12 @@ featureReactive <-
                       ngsData <- clusteringReactive()$ngsData
                     }
                     
-                    output$featurePlot <- renderPlot(FeaturePlot(ngsData, features = input$genesToFeaturePlot))
+                    if (input$reductTechFeature == "umap"){
+                      output$featurePlot <- renderPlot(FeaturePlot(ngsData, features = input$genesToFeaturePlot, reduction = input$reductTechFeature))
+                    }
+                    else if (input$reductTechFeature == "tsne"){
+                      output$featurePlot <- renderPlot(FeaturePlot(ngsData, features = input$genesToFeaturePlot, reduction = input$reductTechFeature))
+                    }
                   })
                 })
 
