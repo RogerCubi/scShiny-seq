@@ -95,6 +95,18 @@ output$tableInfo <- renderText({
      }
   })
 
+output$tableInfoLenght <- renderText({
+  tmp <- reactiveInputData()
+  
+  if (!is.null(reactiveInputData()$data)){
+    if (ncol(tmp$data) > 20){
+      paste0("Note: data contains ", ncol(tmp$data), " columns, only the first 20 will show here.")
+    }
+    else{
+      paste0("Note: data contains ", ncol(tmp$data), " columns.")
+    }
+  }
+})
 # Initialize the Seurat object with the raw (non-normalized data).
 observe({
   reactiveSeuratObject()

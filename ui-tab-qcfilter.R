@@ -1,8 +1,20 @@
 tabItem(tabName = "qcFilterTab",
         
         fluidRow(
-                titlePanel("Filter Cells"),
-                p("At this step you can filter the cells, select a threshold to define a 'gate'"),
+                h4(strong("Data pre-processing:")),
+                p("At this step you can explore QC metrics and filter cells based on a user-defined criteria."),
+                p("A few QC metrics commonly used by the ", a("community",href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4758103/"), " include"),
+                tags$ul(tags$li("The number of unique genes detected in each cell."),
+                        tags$ul(
+                                tags$li("Low-quality cells or empty droplets will often have very few genes."),
+                                tags$li("Cell doublets or multiplets may exhibit an aberrantly high gene count.")),
+                        tags$li("Similarly, the total number of molecules detected within a cell (correlates strongly with unique genes)."),
+                        tags$li("The percentage of reads that map to the mitochondrial genome."),
+                        tags$ul(
+                                tags$li("Low-quality / dying cells often exhibit extensive mitochondrial contamination.")
+                        )
+                        
+                ),
                 column(12,
                        column(4,
                               verticalLayout(plotOutput("violinFeature"),

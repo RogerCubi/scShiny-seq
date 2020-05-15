@@ -39,8 +39,13 @@ tabItem(tabName = "datainput",
 
             ), # sidebarPanel
             mainPanel(
-              DT::dataTableOutput("loadData"),
-              fluidRow(column(width = 5, textOutput("tableInfo")))
+                    h4(strong("Loading the data:")),
+                    p("You can load a .csv file from a non-UMI-based single-cell RNA-seq experiment, or 1 .mtx file, and 2 .tsv files from a 10X experiment."),
+                    p("Also is included the dataset of Peripheral Blood Mononuclear Cells (PBMC) freely available from 10X Genomics"),
+                    fluidRow(column(width = 12, textOutput("tableInfoLenght"))),
+                    hr(),
+                    DT::dataTableOutput("loadData"),
+                    fluidRow(column(width = 5, textOutput("tableInfo")))
               
             )
           ) #sidebarLayout

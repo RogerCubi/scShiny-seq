@@ -2,7 +2,11 @@ tabItem(tabName = "filterNormSelectTab",
 
         fluidRow(column(
           12,
-          h3(strong("Normalize, Select Var. Features, Scale Data")),
+          h4(strong("Normalizing the data")),
+          p("After removing unwanted cells from the dataset, the next step is to normalize the data. By default, 
+            is employed a global-scaling normalization method “LogNormalize” that normalizes the feature expression
+            measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default),
+            and log-transforms the result.")
         ),
         hr(),
         column(12,
