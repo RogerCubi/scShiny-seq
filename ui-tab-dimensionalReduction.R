@@ -11,8 +11,10 @@ tabItem(tabName = "pcaTab",
               textOutput("nextStepDimensionality")
             ),
             mainPanel(
-              verbatimTextOutput("renderprint")
-              )# mainPanel
+                    h4(strong("Linear dimensional reduction")),
+                    p("At this step, a PCA is performed on the scaled data. Only the previously determined variable features are used as input."),
+                    verbatimTextOutput("renderprint")
+                    )# mainPanel
           )
         ),
         
@@ -35,6 +37,13 @@ tabItem(tabName = "pcaTab",
               actionButton(inputId = "pcaGraphImput", label = "Validate Selection")
             ), # sidebarPanel
             mainPanel(
+                    h4(strong("visualizing cells and features that define the PCA")),
+                    p("Seurat provides several useful ways of visualizing both cells and features that define the PCA,
+                      including VizDimLoadings, DimPlot, and DimHeatmap"),
+                    p(strong("VizDimLoadings "), "allows to visualize top genes associated with reduction components."),
+                    p(strong("DimPlot "), "allows to visualize the cells in the 2 principal components"),
+                    p(strong("DimHeatmap "), "allows for easy exploration of the primary sources of heterogeneity in a dataset, and can be useful when trying to decide which PCs to include for further downstream analyses.
+                      Both cells and features are ordered according to their PCA scores"),
               plotOutput("dimRedPlot"),
               conditionalPanel("output.downloadPCA && input.visualizePCA == 'VizDimReduction'",
                                h4(strong("Plot download options")),

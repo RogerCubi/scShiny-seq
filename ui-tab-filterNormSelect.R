@@ -15,11 +15,23 @@ tabItem(tabName = "filterNormSelectTab",
                       selectInput("normalization", "Normalization Method", choices = "LogNormalize")
                       ),
                column(6,
-                      numericInput("scale", "Scale Factor", value = 1000, min = 1, max = Inf))
+                      numericInput("scale", "Scale Factor", value = 10000, min = 1, max = Inf))
                ),
         hr(),
         column(12,
                h4(strong("Detection of variable genes across the single cells")),
+               p("Then a subset of features that exhibit high cell-to-cell variation in the dataset are calculated 
+                 (i.e, they are highly expressed in some cells, and lowly expressed in others). 
+                 Focusing on these genes in downstream analysis helps to highlight biological signal in single-cell datasets as is described in "
+                 , a("Brennecke et.al.",href="https://www.nature.com/articles/nmeth.2645")),
+               h4(strong("Scaling the data")),
+               p("Finally, a linear transformation (‘scaling’) is applied,
+                 this scaling is a standard pre-processing step prior to dimensional reduction techniques like PCA."),
+               p("The scaling:"),
+               tags$ul(
+                       tags$li("Shifts the expression of each gene, so that the mean expression across cells is 0."),
+                       tags$li("Scales the expression of each gene, so that the variance across cells is 1.
+                               (This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate).")),
                column(6,
                       selectInput("selmethod", "Selection Method", choices = "vst")),
                column(6,

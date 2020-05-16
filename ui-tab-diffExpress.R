@@ -1,10 +1,30 @@
 tabItem(tabName = "diffExpTab",
         
         fluidPage(
+          h4(strong("Finding differentially expressed features (cluster biomarkers)")),
+          p( "Seurat allows for pre-filtering of features or cells. The ",strong("Minimum percentage detection"),
+             " argument requires a feature to be detected at a minimum percentage in either of the two groups of cells. 
+                         The ",strong("logfc Threshold")," argument selects the genes with an average expression above the log-fold change selected.
+                         Also its possible to select only the positive markers."),
+          tags$ul(
+            p("It is possible to perform DE analysis using alternative tests. "),
+            tags$li("“wilcox” : Wilcoxon rank sum test (default)"),
+            tags$li("“bimod” : Likelihood-ratio test for single cell feature expression, ", a("(McDavid et al., Bioinformatics, 2013)",href="https://www.ncbi.nlm.nih.gov/pubmed/23267174")),
+            tags$li("“roc” : Standard AUC classifier"),
+            tags$li("“t” : Student’s t-test"),
+            tags$li("“poisson” : Likelihood ratio test assuming an underlying Poisson distribution. Use only for UMI-based datasets"),
+            tags$li("“negbinom” : Likelihood ratio test assuming an underlying negative binomial distribution. Use only for UMI-based datasets"),
+            tags$li("“LR” : Uses a logistic regression framework to determine differentially expressed genes. Constructs a logistic regression model predicting group membership based on each feature individually and compares this to a null model with a likelihood ratio test."),
+            tags$li("“MAST” : GLM-framework that treates cellular detection rate as a covariate ", a("(Finak et al, Genome Biology, 2015)",href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4676162/")),
+            tags$li("“DESeq2” : DE based on a model using the negative binomial distribution  ", a("(Love et al, Genome Biology, 2014)",href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8")),
+          ),
           tabsetPanel(
             tabPanel(title = "Find all markers",
-                     wellPanel(h4("Select the parameters:"),
-                                fluidRow(column(6,numericInput(inputId = "min.pct",label = "Minimum percentage detection",value = 0.25, min = 0, max = 1,step = 0.05)),
+                     wellPanel(
+                       h4(strong("Features diferentially expressef for all clusters")),
+                       p("This panel will find the markers that define clusters via differential expression."),
+                       h4("Select the parameters:"),
+                       fluidRow(column(6,numericInput(inputId = "min.pct",label = "Minimum percentage detection",value = 0.25, min = 0, max = 1,step = 0.05)),
                                          column(6,numericInput(inputId = "logfcThreshold",label = "logfc Threshold",value = 0.25, min = 0, max = Inf,step = 0.05))),
                                fluidRow(column(6,checkboxInput(inputId = "onlyPos",label = "Select only positive markers", value = FALSE)),
                                         column(6,selectInput(inputId = "DEtests",label = "DE analysis test",choices = c("wilcox",
