@@ -17,6 +17,9 @@ library(DT)
 library(ggplot2)
 library(DESeq2)
 library(MAST)
+library(SingleCellExperiment)
+library(SC3)
+library(scater)
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #     install.packages("BiocManager")
 # 
@@ -33,6 +36,7 @@ ui <- tagList(
     dashboardSidebar(
         sidebarMenu(
             id = "tabs",
+            menuItem(text = "Introduction", tabName = "intro", icon = icon("info")),
             menuItem(text = "Input Data", tabName = "datainput", icon = icon("upload")),
             menuItem(text = "QC & Filter", tabName = "qcFilterTab", icon = icon("filter")),
             menuItem(text = "Normalization", tabName = "filterNormSelectTab", icon = icon("th")),
@@ -41,11 +45,13 @@ ui <- tagList(
             menuItem(text = "Cell Clustering", tabName = "clusteringTab", icon = icon("object-group")),
             menuItem(text = "Save or load Seurat analysis", tabName = "saveSeuratTab", icon = icon("save")),
             menuItem(text = "Differentially expressed genes", tabName = "diffExpTab", icon = icon("search")),
-            menuItem(text = "Visualizing marker expression", tabName = "plotMarkerTab", icon = icon("chart-bar"))
+            menuItem(text = "Visualizing marker expression", tabName = "plotMarkerTab", icon = icon("chart-bar")),
+            menuItem(text = "SC3 Clustering", tabName = "sc3Tab", icon = icon("object-group"))
         ) #sidebarMenu
     ), #dashboardSidebar
     dashboardBody(
         tabItems(
+            source("ui-tab-intro.R", local = TRUE)$value,
             source("ui-tab-inputdata.R", local = TRUE)$value,
             source("ui-tab-qcfilter.R", local = TRUE)$value,
             source("ui-tab-filterNormSelect.R", local = TRUE)$value,
@@ -54,7 +60,8 @@ ui <- tagList(
             source("ui-tab-clustering.R", local = TRUE)$value,
             source("ui-tab-saveObject.R", local = TRUE)$value,
             source("ui-tab-diffExpress.R", local = TRUE)$value,
-            source("ui-tab-visualizingExpression.R", local = TRUE)$value
+            source("ui-tab-visualizingExpression.R", local = TRUE)$value,
+            source("ui-tab-sc3Clustering.R", local = TRUE)$value
         )
     ),
 )#dashboardPage
@@ -82,6 +89,8 @@ server <- function(input, output, session) {
     source("server-diffExpress.R",local = TRUE)
     
     source("server-visualizingExpression.R",local = TRUE)
+    
+    source("server-sc3Clustering.R",local = TRUE)
     
 }
 
