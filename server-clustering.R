@@ -10,13 +10,13 @@ clusteringReactive <-
                     
                     ngsData <- dimensionalityReactive()$ngsData
                     
-                    ngsData <- FindNeighbors(ngsData, dims = 1:input$dimNumClustering)
+                    ngsData <- FindNeighbors(ngsData, dims = input$dimNumClustering1:input$dimNumClustering2)
                     ngsData <- FindClusters(ngsData, resolution = input$dimResolution)
                   })
                   withProgress(message = "Running non-linear dimensional reduction (UMAP/tSNE), please wait",{
 
-                    ngsData <- RunUMAP(ngsData, dims = 1:input$dimNumClustering)
-                    ngsData <- RunTSNE(ngsData, dims = 1:input$dimNumClustering, method = "FIt-SNE")
+                    ngsData <- RunUMAP(ngsData, dims = input$dimNumClustering1:input$dimNumClustering2)
+                    ngsData <- RunTSNE(ngsData, dims = input$dimNumClustering1:input$dimNumClustering2, method = "FIt-SNE")
 
                     # # Examine and visualize PCA results a few different ways
                     # 

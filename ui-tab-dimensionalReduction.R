@@ -4,7 +4,9 @@ tabItem(tabName = "pcaTab",
         fluidPage(
           sidebarLayout(
             sidebarPanel(
-              numericInput(inputId = "PCs_to_Show", label =  "Number of PCs to show", value = 6, min = 1, max = Inf, step = 1),
+                    p("Select the dimensions to use:"),
+                    numericInput(inputId = "PCs_to_Show1", label =  "Select the first dimension to use", value = 1, min = 1, max = Inf, step = 1),
+                    numericInput(inputId = "PCs_to_Show2", label =  "Select the last dimension to use", value = 6, min = 1, max = Inf, step = 1),
               numericInput(inputId = "genes_to_Show", label =  "Number of Genes to show", value = 5, min = 1, max = Inf, step = 1),
               actionButton(inputId = "pcaImput", label = "Validate Selection"),
               tags$style("#nextStepDimensionality {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
