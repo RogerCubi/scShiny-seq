@@ -44,9 +44,9 @@ sc3_plot_consensus(
   )
 )
 
-sc3_plot_silhouette(sce, k = 3)
+sc3_plot_silhouette(sce, k = 15)
 
-sc3_plot_expression(sce, k = 3)
+sc3_plot_expression(sce, k = 15)
 
 #It is also possible to annotate cells (columns of the expression matrix) with any column of the colData slot of the sce object.
 sc3_plot_expression(
@@ -54,8 +54,8 @@ sc3_plot_expression(
   show_pdata = c(
     "seurat_clusters", 
     "log10_total_features",
-    "sc3_4_clusters", 
-    "sc3_4_log2_outlier_score"
+    "sc3_8_clusters", 
+    "sc3_8_log2_outlier_score"
   )
 )
 
@@ -64,17 +64,17 @@ sc3_plot_de_genes(sce, k = 3)
 
 
 sc3_plot_de_genes(
-  sce, k = 4, 
+  sce, k = 8, 
   show_pdata = c(
     "seurat_clusters",
-    "sc3_3_clusters", 
-    "sc3_3_log2_outlier_score"
+    "sc3_8_clusters", 
+    "sc3_8_log2_outlier_score"
   )
 )
 
 
 #Marker Genes
-sc3_plot_markers(sce, k = 4)
+sc3_plot_markers(sce, k = 8)
 
 
 sc3_plot_markers(
@@ -82,8 +82,8 @@ sc3_plot_markers(
   show_pdata = c(
     "seurat_clusters", 
     "log10_total_features",
-    "sc3_3_clusters", 
-    "sc3_3_log2_outlier_score"
+    "sc3_8_clusters", 
+    "sc3_8_log2_outlier_score"
   )
 )
 
@@ -91,8 +91,19 @@ sc3_plot_markers(
 sce <- sc3_estimate_k(sce)
 
 
-str(metadata(sce)$sc3)
+as.character(metadata(sce)$sc3[["k_estimation"]])
 
+sce@metadata[["sc3"]][["k_estimation"]]
 
+names(metadata(sce)$sc3$consensus)
 
+consensus <- metadata(sce)$sc3$consensus
+if (is.null(consensus)) {
+  warning(paste0("Please run sc3_calc_consens() first!"))
+  return()
+}
 
+ks <- as.numeric(names(consensus))
+dataset <- get_processed_dataset(sce)
+
+names(sce@colData@listData)

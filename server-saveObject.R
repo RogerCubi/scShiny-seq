@@ -1,13 +1,37 @@
 
 # Download rds of analysis
 
+observe({
+  objectClassReactive()
+})
+
+objectClassReactive <- reactive({
+  
+  ngsData <- clusteringReactive()$ngsData
+  
+  if (!is.null(ngsData)){
+    
+    if(input$ObjectClass=="Seurat"){
+    return(list("ngsData"=ngsData))
+    }
+    
+    else if (input$ObjectClass=="SingleCellExperiment(SCE)"){
+      
+    ngsData@active.assay <- 'RNA'
+    ngsData <- as.SingleCellExperiment(ngsData)
+    return(list("ngsData"=ngsData))
+    }
+  }
+}
+)
+
 output$downloadData <- downloadHandler(
   
   filename = function() {
     paste(input$projectname, ".rds", sep = "")
   },
   content = function(file) {
-    saveRDS(clusteringReactive()$ngsData, file)
+      saveRDS(objectClassReactive()$ngsData, file)
   }
 )
 
@@ -27,6 +51,11 @@ loadClusteringReactive <- reactive({
       return(NULL)
     
     ngsData <- readRDS(inFile$datapath, refhook = NULL)
+    
+    if(class(ngsData)=="SingleCellExperiment"){
+      
+      ngsData <- as.Seurat(ngsData, counts = "counts", data = "logcounts",assay = "RNA")
+    }
     
     print("Analisys loaded")
     
