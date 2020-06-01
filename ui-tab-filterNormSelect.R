@@ -24,6 +24,15 @@ tabItem(tabName = "filterNormSelectTab",
                  (i.e, they are highly expressed in some cells, and lowly expressed in others). 
                  Focusing on these genes in downstream analysis helps to highlight biological signal in single-cell datasets as is described in "
                  , a("Brennecke et.al.",href="https://www.nature.com/articles/nmeth.2645")),
+               p("You can select 3 methods to choose the top variable features:"),
+               tags$ul(
+                       tags$li("vst: First, fits a line to the relationship of log(variance) and log(mean) using local polynomial regression (loess). 
+                               Then standardizes the feature values using the observed mean and expected variance (given by the fitted line).
+                               Feature variance is then calculated on the standardized values after clipping to a maximum (see clip.max parameter)."),
+                       tags$li("mean.var.plot (mvp): First, uses a function to calculate average expression (mean.function) and dispersion (dispersion.function) for each feature. 
+                               Next, divides features into num.bin (deafult 20) bins based on their average expression, and calculates z-scores for dispersion within each bin. 
+                               The purpose of this is to identify variable features while controlling for the strong relationship between variability and average expression."),
+                       tags$li("dispersion (disp): selects the genes with the highest dispersion values.")),
                h4(strong("Scaling the data")),
                p("Finally, a linear transformation (‘scaling’) is applied,
                  this scaling is a standard pre-processing step prior to dimensional reduction techniques like PCA."),
@@ -33,7 +42,7 @@ tabItem(tabName = "filterNormSelectTab",
                        tags$li("Scales the expression of each gene, so that the variance across cells is 1.
                                (This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate).")),
                column(6,
-                      selectInput("selmethod", "Selection Method", choices = "vst")),
+                      selectInput("selmethod", "Selection Method", choices = c("vst", "mvp", "disp"))),
                column(6,
                       numericInput("nfeatures", "Features number", value = 2000, min = 0, max = Inf))),
         column(12,  
