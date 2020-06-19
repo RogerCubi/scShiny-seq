@@ -4,7 +4,7 @@ tabItem(tabName = "intro",
           p("This Shiny aplication allows the user to perform a single cell analysis using the 
             ",a("Seurat - Guided Clustering Tutorial pipeline",href="https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html")," ,
             and also implements the ",a("SC3 clustering",href="https://bioconductor.org/packages/devel/bioc/vignettes/SC3/inst/doc/SC3.html#de-and-marker-genes")),
-          p("The seurat pipeline was inspired and some parts adapted of the shiny aplication ",a("seurat V3",href="https://github.com/satijalab/seurat")),
+          p("The seurat pipeline was inspired and some parts adapted of the shiny aplication ",a("seurat V3.",href="https://github.com/satijalab/seurat"), "Most of the text describing the analysis options is extracted from the ",a("Seurat Guided Clustering Tutorial.",href="https://satijalab.org/seurat/v3.1/pbmc3k_tutorial.html")),
           p("The progression throw the pipeline is represented in the image below:"),
           hr(),
           img(src = "Pipeline.png", height = 600, width = 400, style="display: block; margin-left: auto; margin-right: auto;"),
