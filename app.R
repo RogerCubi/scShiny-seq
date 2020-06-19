@@ -32,7 +32,16 @@ library(scater)
 # Define UI for application that draws a histogram
 ui <- tagList(
     dashboardPage(
-    dashboardHeader(title = "scShinySeq"),
+    dashboardHeader(title = "scShinySeq", tags$li(
+        a(
+            strong("Roger Cubí Piqué"),
+            height = 40,
+            href = "https://github.com/RogerCubi/scShiny-seq",
+            title = "",
+            target = "_blank"
+        ),
+        class = "dropdown"
+    )),
     dashboardSidebar(
         sidebarMenu(
             id = "tabs",
