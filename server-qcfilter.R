@@ -1,3 +1,5 @@
+library(scater)
+
 observe({
   ThresholdDataReactive()
   if (!is.null(reactiveSeuratObject()$ngsData)){
