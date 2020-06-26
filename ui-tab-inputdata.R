@@ -34,7 +34,7 @@ tabItem(tabName = "datainput",
                                #)
               ), # ConditionalPanel
               hr(),
-              textOutput("nextStep1")
+              uiOutput("nextStep1")
               
 
             ), # sidebarPanel
