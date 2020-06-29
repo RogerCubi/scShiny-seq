@@ -92,8 +92,7 @@ tabItem(tabName = "filterNormSelectTab",
                )
                )),
         fluidRow(column(12,
-                        tags$style("#nextStepDimRed {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
-                        textOutput("nextStepDimRed")
+                        uiOutput('nextStepDimRed')
                         ))
         
         )

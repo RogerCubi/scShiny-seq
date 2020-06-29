@@ -85,8 +85,11 @@ ui <- tagList(
 )#dashboardPage
 )
 
-#max upload 300mb
-options(shiny.maxRequestSize = 300*1024^2)
+## max upload 300mb
+## options(shiny.maxRequestSize = 300*1024^2)
+
+## max upload 100 MB (updated for imlsauftakt)
+options(shiny.maxRequestSize = 100*1024^2)
 
 server <- function(input, output, session) {
     
@@ -144,12 +147,25 @@ server <- function(input, output, session) {
 
     ## })
 
-    ## example button to show a `jump to next step` capability, @todo check if a good idea?
+    ## automated browsing based in action buttons
     observeEvent(input$done_input_data, {
         updateTabsetPanel(session, "sidebar",
                           selected = "qcFilterTab")
 
-    })    
+    })
+
+    observeEvent(input$done_filtering, {
+        updateTabsetPanel(session, "sidebar",
+                          selected = "filterNormSelectTab")
+
+    })
+
+    observeEvent(input$done_norm, {
+        updateTabsetPanel(session, "sidebar",
+                          selected = "pcaTab")
+
+    })
+
     source("server-qcfilter.R",local = TRUE)
 
     source("server-normSelect.R",local = TRUE)

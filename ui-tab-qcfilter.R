@@ -19,7 +19,7 @@ tabItem(tabName = "qcFilterTab",
                        column(4,
                               verticalLayout(plotOutput("violinFeature"),
                                              sliderInput("featureThreshold", label = "Features threshold selection", min = 0, 
-                                                         max = 100, value = c(0, 100)),
+                                                         max = 1000, value = c(0, 1000)),
                                              textOutput("numberCellsFeature"),
                                              wellPanel(h4(strong("Plot download options")),
                                                        numericInput(inputId = "widthF",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
@@ -32,7 +32,7 @@ tabItem(tabName = "qcFilterTab",
                        column(4,
                               verticalLayout(plotOutput("violinCounts"),
                                              sliderInput("countsThreshold", label = "Counts threshold selection", min = 0, 
-                                                         max = 100, value = c(0, 100)),
+                                                         max = 2000, value = c(0, 2000)),
                                              textOutput("numberCellsCounts"),
                                              wellPanel(h4(strong("Plot download options")),
                                                        numericInput(inputId = "widthC",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
@@ -44,7 +44,7 @@ tabItem(tabName = "qcFilterTab",
                        column(4,
                               verticalLayout(plotOutput("violinMito"),
                                              sliderInput("mitocondrialThreshold", label = "% Mitocondrial threshold selection", min = 0, 
-                                                         max = 100, value =  100),
+                                                         max = 100, value =  10),
                                              textOutput("numberCellsMito"),
                                              wellPanel(h4(strong("Plot download options")),
                                                        numericInput(inputId = "widthM",label = "Plot width (in cm)", value = 15,min = 1,max = 100),
@@ -75,8 +75,10 @@ tabItem(tabName = "qcFilterTab",
                                 actionButton("submit_threshold","Submit Threshold", style = "width: 100%")
                         )),
                  column(6,
-                        tags$style("#nextStepNormalization {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
-                        textOutput("nextStepNormalization")
+                        ## tags$style("#nextStepNormalization {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
+                        ## textOutput("nextStepNormalization")
+                        uiOutput('nextStepNormalization')
+
                         )
                         
         )
