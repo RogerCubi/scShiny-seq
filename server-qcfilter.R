@@ -101,7 +101,7 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                    )
                                    
                                    output$violinMito <- renderPlot(VlnPlot(ngsData, features = "percent.mt", ncol = 1,cols= "red")%>%
-                                                                     + ggtitle("% Mitocondrial counts") %>%
+                                                                     + ggtitle("% Mitochondrial counts") %>%
                                                                      + geom_hline(yintercept = input$mitocondrialThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
                                                                      + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=-1, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
                                                                      + scale_y_continuous(limits=c(minThreshMt - 0.1*(maxThreshMt - minThreshMt),maxThreshMt + 0.5*(maxThreshMt - minThreshMt)))
@@ -113,7 +113,7 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                      },
                                      content = function(file) {
                                        ggsave(file, VlnPlot(ngsData, features = "percent.mt", ncol = 1,cols= "red")%>%
-                                                + ggtitle("% Mitocondrial counts") %>%
+                                                + ggtitle("% Mitochondrial counts") %>%
                                                 + geom_hline(yintercept = input$mitocondrialThreshold[1],color = 'red',linetype = "dashed", size = 1) %>%
                                                 + geom_text(x=1,y=input$mitocondrialThreshold, label="high.threshold", vjust=-1, hjust=0,color = "red",size = 5,fontface = "bold",alpha = 0.7, family=c("serif", "mono")[2]) %>%
                                                 + scale_y_continuous(limits=c(minThreshMt - 0.1*(maxThreshMt - minThreshMt),maxThreshMt + 0.5*(maxThreshMt - minThreshMt))), device = input$deviceM, width = input$widthM, height = input$heightM, units = "cm", dpi = input$dpiM)
@@ -149,22 +149,46 @@ ThresholdDataReactive <- eventReactive(input$upload_data,
                                      
                                      paste0("Selected ",nrow(mitoDataThreshold), " cells of a total of ", nrow(mitoData))
                                    })
-                                   
-                                   plot1 <- FeatureScatter(ngsData, feature1 = "nCount_RNA", feature2 = "percent.mt",cols= "red")%>%
-                                     + ggtitle("% Mitocondrial vs Counts")
-                                   plot2 <- FeatureScatter(ngsData, feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols= "red")%>%
-                                     + ggtitle("Number of features vs Counts")
-                                   output$qc_scatter <- renderPlot(plot1 + plot2)
-                                   
-                                   output$downloadScatter <- downloadHandler(
-                                     filename = function() {
-                                       paste0("ScatterPlot.", input$deviceS)
-                                     },
-                                     content = function(file) {
-                                       ggsave(file, (plot1 + plot2), device = input$deviceS, width = input$widthS, height = input$heightS, units = "cm", dpi = input$dpiS)
-                                     }
-                                   )
-                                   
+
+                                   ## after-filtering QC plot observes the current thresholds
+                                   observeEvent(input$mitocondrialThreshold &
+                                                input$countsThreshold &
+                                                input$featureThreshold, {
+
+                                           ## the ngsData is returned on error         
+                                           plot1 <-  FeatureScatter(
+                                               tryCatch({subset(ngsData,
+                                                                nFeature_RNA > input$featureThreshold[1] &
+                                                                nFeature_RNA < input$featureThreshold[2] &
+                                                                nCount_RNA > input$countsThreshold[1] &
+                                                                nCount_RNA < input$countsThreshold[2] &
+                                                                percent.mt < input$mitocondrialThreshold)
+                                               }, error = function(x) return(ngsData)),
+                                               feature1 = "nCount_RNA", feature2 = "percent.mt", cols= "red") %>%
+                                               + ggtitle("% Mitochondrial vs Counts")
+                                           
+                                           plot2 <- FeatureScatter(tryCatch({subset(ngsData,
+                                                                                    nFeature_RNA > input$featureThreshold[1] &
+                                                                                    nFeature_RNA < input$featureThreshold[2] &
+                                                                                    nCount_RNA > input$countsThreshold[1] &
+                                                                                    nCount_RNA < input$countsThreshold[2] &
+                                                                                    percent.mt < input$mitocondrialThreshold)
+                                           }, error = function(x) return(ngsData)),
+                                           feature1 = "nCount_RNA", feature2 = "nFeature_RNA",cols= "red")%>%
+                                               + ggtitle("Number of features vs Counts")
+
+                                           output$qc_scatter <- renderPlot(plot1 + plot2)
+
+                                           output$downloadScatter <- downloadHandler(
+                                               filename = function() {
+                                                   paste0("ScatterPlot.", input$deviceS)
+                                               },
+                                               content = function(file) {
+                                                   ggsave(file, (plot1 + plot2), device = input$deviceS, width = input$widthS,
+                                                          height = input$heightS, units = "cm", dpi = input$dpiS)
+                                               })
+                                   })
+                                  
                                    # Text Output all
                                    output$numberCellsThreshold <- renderText({
                                      

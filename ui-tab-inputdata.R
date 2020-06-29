@@ -7,7 +7,7 @@ tabItem(tabName = "datainput",
               radioButtons("datatype", "Select the Data",
                            c("nonUMI Dataset" = "uploadNonUmi",
                              "10X Dataset" = "10xdata",
-                             "PBMC Dataset" = "pbmcdata")),
+                             "PBMC Dataset (toy data)" = "pbmcdata")),
               
               hr(),
               conditionalPanel(condition = "input.datatype=='uploadNonUmi' ||  input.datatype=='10xdata'",

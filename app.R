@@ -85,8 +85,11 @@ ui <- tagList(
 )#dashboardPage
 )
 
-#max upload 300mb
-options(shiny.maxRequestSize = 300*1024^2)
+## max upload 300mb
+## options(shiny.maxRequestSize = 300*1024^2)
+
+## max upload 100 MB (updated for imlsauftakt)
+options(shiny.maxRequestSize = 100*1024^2)
 
 server <- function(input, output, session) {
     
