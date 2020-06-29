@@ -144,12 +144,25 @@ server <- function(input, output, session) {
 
     ## })
 
-    ## example button to show a `jump to next step` capability, @todo check if a good idea?
+    ## automated browsing based in action buttons
     observeEvent(input$done_input_data, {
         updateTabsetPanel(session, "sidebar",
                           selected = "qcFilterTab")
 
-    })    
+    })
+
+    observeEvent(input$done_filtering, {
+        updateTabsetPanel(session, "sidebar",
+                          selected = "filterNormSelectTab")
+
+    })
+
+    observeEvent(input$done_norm, {
+        updateTabsetPanel(session, "sidebar",
+                          selected = "pcaTab")
+
+    })
+
     source("server-qcfilter.R",local = TRUE)
 
     source("server-normSelect.R",local = TRUE)

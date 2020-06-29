@@ -75,8 +75,10 @@ tabItem(tabName = "qcFilterTab",
                                 actionButton("submit_threshold","Submit Threshold", style = "width: 100%")
                         )),
                  column(6,
-                        tags$style("#nextStepNormalization {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
-                        textOutput("nextStepNormalization")
+                        ## tags$style("#nextStepNormalization {font-size:18px;color:red;display:block;position:relative;text-align:center; }"),
+                        ## textOutput("nextStepNormalization")
+                        uiOutput('nextStepNormalization')
+
                         )
                         
         )
